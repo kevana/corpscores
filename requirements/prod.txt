@@ -33,3 +33,6 @@ Flask-Bcrypt>=0.5.2
 
 # Caching
 Flask-Cache>=0.12
+
+# Admin
+Flask-Admin==1.0.8

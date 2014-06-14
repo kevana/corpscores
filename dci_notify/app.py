@@ -4,13 +4,14 @@ from flask import Flask, render_template
 
 from dci_notify.settings import ProdConfig
 from dci_notify.assets import assets
+from dci_notify.admin import admin
 from dci_notify.extensions import (
     bcrypt,
     cache,
     db,
     login_manager,
     migrate,
-    debug_toolbar,
+    debug_toolbar
 )
 from dci_notify import public, user
 
@@ -37,6 +38,7 @@ def register_extensions(app):
     login_manager.init_app(app)
     debug_toolbar.init_app(app)
     migrate.init_app(app, db)
+    admin.init_app(app)
     return None
 
 
