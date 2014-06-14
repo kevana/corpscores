@@ -10,9 +10,11 @@ from flask import url_for
 from dci_notify.user.models import User
 from .factories import UserFactory
 
+
 @pytest.fixture
 def user(db):
     return UserFactory(password='myprecious')
+
 
 class TestLoggingIn:
 

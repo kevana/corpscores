@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''The admin module, containing classes for Flask-Admin.'''
+'''The admin module, containing Flask-Admin.'''
 from flask.ext.login import current_user
 from flask.ext.admin import Admin
 from flask.ext.admin.contrib.sqla import ModelView

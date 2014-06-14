@@ -2,6 +2,7 @@
 from dci_notify.app import create_app
 from dci_notify.settings import ProdConfig, DevConfig
 
+
 def test_production_config():
     app = create_app(ProdConfig)
     assert app.config['ENV'] == 'prod'

@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired
 
 from dci_notify.user.models import User
 
+
 class LoginForm(Form):
     username = TextField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
