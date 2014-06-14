@@ -49,6 +49,8 @@ def register():
         new_user = User.create(username=form.username.data,
                                email=form.email.data,
                                password=form.password.data,
+                               carrier=form.carrier.data,
+                               phone_num=form.phone_num.data,
                                active=True)
         flash("Thank you for registering. You can now log in.", 'success')
         return redirect(url_for('public.home'))

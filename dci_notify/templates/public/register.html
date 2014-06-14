@@ -15,6 +15,14 @@
                 {{form.email(placeholder="Email", class_="form-control")}}
             </div>
             <div class="form-group">
+                {{form.carrier.label}}
+                {{form.carrier(placeholder="Carrier", class_="form-control")}}
+            </div>
+            <div class="form-group">
+                {{form.phone_num.label}}
+                {{form.phone_num(placeholder="(555) 789-1234", class_="form-control")}}
+            </div>
+            <div class="form-group">
                 {{form.password.label}}
                 {{form.password(placeholder="Password", class_="form-control")}}
             </div>
@@ -26,4 +34,20 @@
     </form>
     <p><em>Already registered?</em> Click <a href="/">here</a> to login.</p>
 </div>
+{% endblock %}
+{% block js %}
+{{ super() }}
+<script type="text/javascript">
+    (function($, window) {
+        $('#phone_num').mask('(000) 000-0000');
+    }).call(this, $, window);
+    $('form').bind('submit', function(){
+        alert('Submit event caught.');
+        $('#phone_num').unmask();
+        var num = $('#phone_num').val();
+        num = num.replace(/\D/g,'');
+        $('#phone_num').val(num);
+        alert(num);
+    });
+</script>
 {% endblock %}

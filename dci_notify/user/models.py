@@ -12,6 +12,7 @@ from dci_notify.database import (
     relationship,
     SurrogatePK,
 )
+from dci_notify.sms import carrier_slugs
 
 
 class Role(SurrogatePK, Model):
@@ -37,6 +38,9 @@ class User(UserMixin, SurrogatePK, Model):
     created_at = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
     first_name = Column(db.String(30), nullable=True)
     last_name = Column(db.String(30), nullable=True)
+    carrier = Column(db.Enum(*carrier_slugs, name='Carriers'), nullable=True)
+    phone_num = Column(db.String(10), unique=True, nullable=True)
+    phone_active = Column(db.Boolean(), default=False)
     active = Column(db.Boolean(), default=False)
     is_admin = Column(db.Boolean(), default=False)
 

@@ -11,7 +11,8 @@ from dci_notify.extensions import (
     db,
     login_manager,
     migrate,
-    debug_toolbar
+    debug_toolbar,
+    mail
 )
 from dci_notify import public, user
 
@@ -39,6 +40,7 @@ def register_extensions(app):
     debug_toolbar.init_app(app)
     migrate.init_app(app, db)
     admin.init_app(app)
+    mail.init_app(app)
     return None
 
 

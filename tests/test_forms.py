@@ -11,6 +11,7 @@ class TestRegisterForm:
     def test_validate_user_already_registered(self, user):
         # Enters username that is already registered
         form = RegisterForm(username=user.username, email='foo@bar.com',
+                            carrier='at&t', phone_num='5551234567',
                             password='example', confirm='example')
 
         assert form.validate() is False
@@ -19,13 +20,24 @@ class TestRegisterForm:
     def test_validate_email_already_registered(self, user):
         # enters email that is already registered
         form = RegisterForm(username='unique', email=user.email,
+                            carrier='at&t', phone_num='5551234567',
                             password='example', confirm='example')
 
         assert form.validate() is False
         assert 'Email already registered' in form.email.errors
 
+    def test_validate_phone_already_registered(self, user):
+        # Enters phone number that is already registered
+        form = RegisterForm(username='unique', email='foo@bar.com',
+                            carrier='at&t', phone_num=user.phone_num,
+                            password='example', confirm='example')
+
+        assert form.validate() is False
+        assert 'Phone number already registered' in form.phone_num.errors
+
     def test_validate_success(self, db):
         form = RegisterForm(username='newusername', email='new@test.test',
+                            carrier='at&t', phone_num='5551234567',
                             password='example', confirm='example')
         assert form.validate() is True
 

@@ -1,8 +1,9 @@
 from flask_wtf import Form
-from wtforms import TextField, PasswordField
+from wtforms import PasswordField, SelectField, TextField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 from .models import User
+from dci_notify.sms import carrier_form_tuples
 
 
 class RegisterForm(Form):
@@ -10,6 +11,11 @@ class RegisterForm(Form):
                          validators=[DataRequired(), Length(min=3, max=25)])
     email = TextField('Email',
                       validators=[DataRequired(), Email(), Length(min=6, max=40)])
+    carrier = SelectField('Carrier',
+                          choices=carrier_form_tuples,
+                          validators=[DataRequired()])
+    phone_num = TextField('Phone Number',
+                          validators=[DataRequired(), Length(min=10, max=10)])
     password = PasswordField('Password',
                              validators=[DataRequired(), Length(min=6, max=40)])
     confirm = PasswordField('Verify password',
@@ -31,5 +37,9 @@ class RegisterForm(Form):
         user = User.query.filter_by(email=self.email.data).first()
         if user:
             self.email.errors.append("Email already registered")
+            return False
+        user = User.query.filter_by(phone_num=self.phone_num.data).first()
+        if user:
+            self.phone_num.errors.append("Phone number already registered")
             return False
         return True
