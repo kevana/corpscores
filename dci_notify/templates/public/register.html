@@ -42,12 +42,10 @@
         $('#phone_num').mask('(000) 000-0000');
     }).call(this, $, window);
     $('form').bind('submit', function(){
-        alert('Submit event caught.');
         $('#phone_num').unmask();
         var num = $('#phone_num').val();
         num = num.replace(/\D/g,'');
         $('#phone_num').val(num);
-        alert(num);
     });
 </script>
 {% endblock %}
