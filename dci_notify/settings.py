@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import urlparse
 
 
 class Config(object):
@@ -11,13 +12,26 @@ class Config(object):
     DEBUG_TB_ENABLED = False  # Disable Debug toolbar
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
+    # FlaskMail and logging
+    MAIL_SERVER = 'smtp.mailgun.org'
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = 'postmaster@sandbox17422.mailgun.org'
+    MAIL_PASSWORD = '9vwwg5ysiqf0'
+    MAIL_DEFAULT_SENDER = 'sms@sandbox17422.mailgun.org'
+    # Logging setup
+    ADMINS = ['kevan@kevanahlquist.com']
+    LOGGING_SENDER = 'dci-notify-server-error@sandbox17422.mailgun.org'
+    MAIL_SUPPRESS_SEND = False
 
 
 class ProdConfig(Config):
     """Production configuration."""
     ENV = 'prod'
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/example'  # TODO: Change
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
+                                             'postgresql://localhost/app')
     DEBUG_TB_ENABLED = False  # Disable Debug toolbar
 
 
