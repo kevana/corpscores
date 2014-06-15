@@ -1,0 +1,15 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+    <form id="sendMessageForm" class="form form-register" method="POST" action="" role="form">
+    	{{ form.hidden_tag() }}
+    	<div class="form-group">
+                {{form.users.label}}
+                {{form.users(placeholder="Users", class_="form-control")}}
+        </div>
+        <div class="form-group">
+                {{form.message.label}}
+                {{form.message(placeholder="Message", class_="form-control", rows="10")}}
+        </div>
+        <p><input class="btn btn-default btn-submit" type="submit" value="Send Message"></p>
+    </form>
+{% endblock %}

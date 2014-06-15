@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
 
+from dci_notify.admin.forms import SendMessageForm
 from dci_notify.public.forms import LoginForm
 from dci_notify.user.forms import RegisterForm
 from .factories import UserFactory
@@ -72,3 +73,23 @@ class TestLoginForm:
         form = LoginForm(username=user.username, password='example')
         assert form.validate() is False
         assert 'User not activated' in form.username.errors
+
+
+class TestSendMessageForm:
+
+    def test_validate_no_recipients_selected(self, user):
+        pass
+        form = SendMessageForm(message='Test Message')
+        assert form.validate() is False
+        assert 'This field is required.' in form.users.errors
+
+    def test_validate_empty_message(self, user):
+        form = SendMessageForm(users=[user.id])
+        assert form.validate() is False
+        assert 'This field is required.' in form.message.errors
+
+    def test_validate_success(self, user):
+        form = SendMessageForm(users=[user.id], message='Test')
+        form.users.choices = [(user.id, user.full_name)]
+        assert form.validate() is True
+        assert user in form.users_list

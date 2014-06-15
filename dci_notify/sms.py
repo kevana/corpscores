@@ -19,6 +19,7 @@ def send_sms(carrier, number, message, subject=None):
         msg = Message('',
                       recipients=[str(number) + carriers[carrier]['suffix']])
     msg.body = message
+    print('Sending to %s Carrier: %s' % (number, carrier))
     mail.send(msg)
 
 # US Carriers

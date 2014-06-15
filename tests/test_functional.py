@@ -139,3 +139,47 @@ class TestRegistering:
         res = form.submit()
         # sees error
         assert 'Phone number already registered' in res
+
+
+class TestAdmin:
+
+    def test_cannot_access_admin_routes(self, user, testapp):
+        # Goes to homepage
+        res = testapp.get('/')
+        # Fills out login form in navbar
+        form = res.forms['loginForm']
+        form['username'] = user.username
+        form['password'] = 'myprecious'
+        # Submits
+        res = form.submit().follow()
+        assert res.status_code == 200
+        # Check access to all admin routes
+        res = testapp.get('/admin/')
+        assert res.status_code == 200
+        res = testapp.get('/admin/message/', expect_errors=True)
+        assert res.status_code == 403
+        res = testapp.get('/admin/roleview/', expect_errors=True)
+        assert res.status_code == 403
+        res = testapp.get('/admin/userview/', expect_errors=True)
+        assert res.status_code == 403
+
+    def test_can_access_admin_routes(self, user, testapp):
+        user.is_admin = True
+        # Goes to homepage
+        res = testapp.get('/')
+        # Fills out login form in navbar
+        form = res.forms['loginForm']
+        form['username'] = user.username
+        form['password'] = 'myprecious'
+        # Submits
+        res = form.submit().follow()
+        assert res.status_code == 200
+        # Check access to all admin routes
+        res = testapp.get('/admin/')
+        assert res.status_code == 200
+        res = testapp.get('/admin/message/')
+        assert res.status_code == 200
+        res = testapp.get('/admin/roleview/')
+        assert res.status_code == 200
+        res = testapp.get('/admin/userview/')
+        assert res.status_code == 200
