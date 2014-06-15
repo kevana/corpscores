@@ -1,3 +1,3 @@
 '''The user module.'''
 
-import .views
+import dci_notify.user.views
