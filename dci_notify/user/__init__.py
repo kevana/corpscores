@@ -1,3 +1,3 @@
 '''The user module.'''
 
-import views
+import .views
