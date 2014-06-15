@@ -28,6 +28,7 @@ def create_app(config_object=ProdConfig):
     register_extensions(app)
     register_blueprints(app)
     register_errorhandlers(app)
+    register_loggers(app)
     return app
 
 
@@ -57,4 +58,31 @@ def register_errorhandlers(app):
         return render_template("{0}.html".format(error_code)), error_code
     for errcode in [401, 404, 500]:
         app.errorhandler(errcode)(render_error)
+    return None
+
+
+def register_loggers(app):
+    if not (app.debug or app.config.get('LOGGING_DISABLE', False)):
+        import logging
+        from logging import Formatter
+        from logging.handlers import SMTPHandler
+        mail_handler = SMTPHandler(mailhost=app.config['MAIL_SERVER'],
+                                   fromaddr=app.config['LOGGING_SENDER'],
+                                   toaddrs=app.config['ADMINS'],
+                                   subject='dci-notify Server Error',
+                                   credentials=(app.config['MAIL_USERNAME'],
+                                                app.config['MAIL_PASSWORD']))
+        mail_handler.setLevel(logging.ERROR)
+        mail_handler.setFormatter(Formatter('''
+            Message type:       %(levelname)s
+            Location:           %(pathname)s:%(lineno)d
+            Module:             %(module)s
+            Function:           %(funcName)s
+            Time:               %(asctime)s
+
+            Message:
+
+            %(message)s
+        '''))
+        app.logger.addHandler(mail_handler)
     return None
