@@ -1,10 +1,13 @@
 {% extends 'admin/master.html' %}
+{% assets "css_all" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
 {% block body %}
     <form id="sendMessageForm" class="form form-register" method="POST" action="" role="form">
     	{{ form.hidden_tag() }}
     	<div class="form-group">
                 {{form.users.label}}
-                {{form.users(placeholder="Users", class_="form-control")}}
+                {{form.users(placeholder="Users", class_="form-control chosen-select")}}
         </div>
         <div class="form-group">
                 {{form.message.label}}
@@ -12,4 +15,15 @@
         </div>
         <p><input class="btn btn-default btn-submit" type="submit" value="Send Message"></p>
     </form>
+{% endblock %}
+{% block tail_js %}
+{{ super() }}
+{% assets "js_all" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
+<script type="text/javascript">
+    (function($, window) {
+        $(".chosen-select").chosen();
+    }).call(this, $, window);
+</script>
 {% endblock %}
