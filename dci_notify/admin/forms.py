@@ -14,7 +14,7 @@ class SendMessageForm(Form):
 
     def __init__(self, *args, **kwargs):
         super(SendMessageForm, self).__init__(*args, **kwargs)
-        user_tuples = [(user.id, user.phone_num)
+        user_tuples = [(user.id, user.full_name)
                        for user in User.query.filter_by(phone_active=True)]
         self.users.choices = user_tuples
 
