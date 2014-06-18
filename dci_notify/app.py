@@ -69,7 +69,7 @@ def register_loggers(app):
         mail_handler = SMTPHandler(mailhost=app.config['MAIL_SERVER'],
                                    fromaddr=app.config['LOGGING_SENDER'],
                                    toaddrs=app.config['ADMINS'],
-                                   subject='dci-notify Server Error',
+                                   subject='CorpScores Server Error',
                                    credentials=(app.config['MAIL_USERNAME'],
                                                 app.config['MAIL_PASSWORD']))
         mail_handler.setLevel(logging.ERROR)
