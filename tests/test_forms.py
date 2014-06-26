@@ -36,9 +36,16 @@ class TestRegisterForm:
         assert form.validate() is False
         assert 'Phone number already registered' in form.phone_num.errors
 
-    def test_validate_success(self, db):
+    def test_validate_success_no_names(self, db):
         form = RegisterForm(username='newusername', email='new@test.test',
                             carrier='at&t', phone_num='5551234567',
+                            password='example', confirm='example')
+        assert form.validate() is True
+
+    def test_validate_success_with_names(self, db):
+        form = RegisterForm(username='newusername', email='new@test.test',
+                            carrier='at&t', phone_num='5551234567',
+                            first_name='John', last_name='Smith',
                             password='example', confirm='example')
         assert form.validate() is True
 

@@ -11,6 +11,8 @@ class RegisterForm(Form):
                          validators=[DataRequired(), Length(min=3, max=25)])
     email = TextField('Email',
                       validators=[DataRequired(), Email(), Length(min=6, max=40)])
+    first_name = TextField('First Name')
+    last_name = TextField('Last Name')
     carrier = SelectField('Carrier',
                           choices=carrier_form_tuples,
                           validators=[DataRequired()])
