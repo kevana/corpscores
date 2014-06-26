@@ -1,3 +1,4 @@
+#!/Users/kevanahlquist/Dropbox/dev/dci_notify/env/bin/python
 '''
 Monitor the dci.org website for new score postings.
 '''
@@ -27,6 +28,14 @@ dthandler = lambda obj: (
     else json.JSONEncoder().default(obj))
 
 
+def eqIn(item, iterable):
+    '''Quick in operator to test for equality instead of identity'''
+    for thing in iterable:
+        if item == thing:
+            return True
+    return False
+
+
 def send_email(text):
     msg = MIMEText(text)
     msg['Subject'] = 'New Event posted on DCI.org'
@@ -35,9 +44,10 @@ def send_email(text):
     #TODO: Get rid of this
     print(msg['Subject'])
     print(msg.as_string())
-    #s = smtplib.SMTP(MAIL_SERVER)
-    #s.login(MAIL_USERNAME, MAIL_PASSWORD)
-    #s.sendmail(MAIL_DEFAULT_SENDER, [RECIPIENT], msg.as_string())
+    if not MAIL_SUPPRESS_SEND:
+        s = smtplib.SMTP(MAIL_SERVER)
+        s.login(MAIL_USERNAME, MAIL_PASSWORD)
+        s.sendmail(MAIL_DEFAULT_SENDER, [RECIPIENT], msg.as_string())
 
 
 def post_to_app(text):
@@ -87,28 +97,26 @@ def process_event(event):
     thisEvent['api_key'] = API_KEY
     event_text = json.dumps(thisEvent, sort_keys=True, indent=2, default=dthandler)
     send_email(event_text)
-    post_to_app(event_text)
-    print('Processed Event:')
-    pprint(thisEvent)
+    if not APP_SUPPRESS_POST:
+        post_to_app(event_text)
 
 
-def set_latest_uuid(uuid):
+def set_processed_events(events):
     with open(OUTFILE, 'w') as f:
-        f.write(uuid)
+        f.writelines('%s\n' % event for event in events)
 
 
-def get_latest_uuid():
+def get_processed_events():
     try:
         with open(OUTFILE, 'r') as f:
-            ret = f.read()
+            ret = f.readlines()
+            ret = [item.strip() for item in ret]
     except IOError:
-        ret = None
+        ret = []
     return ret
 
 
 def scrape_func():
-    print('.', end='')
-    sys.stdout.flush()
     # Download scores page, compare list of UUIDs to the last one we saw
     # URL redirects to the most recent score data
     r = requests.get('http://www.dci.org/scores', allow_redirects=True)
@@ -119,26 +127,20 @@ def scrape_func():
         options = soup.find('select').findChildren()
     except AttributeError:
         return None
-    event_ids = [opt['value'] for opt in options]
+    current_events = [opt['value'] for opt in options]
     # If new event, send notification to my cell phone
-    latest_event = event_ids[0]
-    last_procd_event = get_latest_uuid()
-    if latest_event != last_procd_event:
-        if last_procd_event:
-            # Subtract 1 to exclude last processed event
-            idx = event_ids.index(last_procd_event) - 1
-        else:
-            idx = len(event_ids)
-        for event in event_ids[idx::-1]:
+    last_processed_events = get_processed_events()
+    diff = [item for item in current_events if not eqIn(item, last_processed_events)]
+    if diff:
+        print('Diff:')
+        print(diff)
+        for event in diff:
             print('Processing event_id:  %s' % event)
             process_event(event)
-        print('New Event Scores available!')
         # Update file with latest event uuid
-        set_latest_uuid(latest_event)
+        set_processed_events(current_events)
+
 
 if __name__ == '__main__':
-    # While True loop
-    print('Entering check loop')
-    while True:
-        scrape_func()
-        sleep(300)
+
+    scrape_func()
