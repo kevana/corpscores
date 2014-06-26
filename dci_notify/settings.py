@@ -17,12 +17,12 @@ class Config(object):
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = 'postmaster@sandbox17422.mailgun.org'
-    MAIL_PASSWORD = '9vwwg5ysiqf0'
-    MAIL_DEFAULT_SENDER = 'sms@sandbox17422.mailgun.org'
+    MAIL_USERNAME = 'postmaster@kevanahlquist.com'
+    MAIL_PASSWORD = '7wo5fqm8u7n9'
+    MAIL_DEFAULT_SENDER = 'sms@kevanahlquist.com'
     # Logging setup
     ADMINS = ['kevan@kevanahlquist.com']
-    LOGGING_SENDER = 'dci-notify-server-error@sandbox17422.mailgun.org'
+    LOGGING_SENDER = 'CorpScores-server-error@kevanahlquist.com'
     MAIL_SUPPRESS_SEND = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
                                              'postgresql://localhost/app')
