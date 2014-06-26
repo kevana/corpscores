@@ -48,9 +48,12 @@ def register():
     if form.validate_on_submit():
         new_user = User.create(username=form.username.data,
                                email=form.email.data,
+                               first_name=form.first_name.data,
+                               last_name=form.last_name.data,
                                password=form.password.data,
                                carrier=form.carrier.data,
                                phone_num=form.phone_num.data,
+                               phone_active=True,
                                active=True)
         flash("Thank you for registering. You can now log in.", 'success')
         return redirect(url_for('public.home'))
