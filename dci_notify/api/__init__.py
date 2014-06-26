@@ -20,7 +20,7 @@ from dci_notify.user.models import User
 from pprint import pprint
 from dci_notify.sms import send_sms
 
-api_key = 'password'
+api_key = '1F4F320E-66A0-4F14-BA09-CBA22F1F9CE9'
 
 score_template = '''{{event.name}} - {{event.date.strftime('%b %d')}}, {{event.city}} {{event.state}}
 {% for corp in event.results -%}

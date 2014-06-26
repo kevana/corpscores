@@ -32,7 +32,7 @@ RECIPIENT = 'ahlqu039@umn.edu'
 # Could probably ignore basedir, make file wherever script is running
 basedir = os.path.abspath(os.path.dirname(__file__))
 OUTFILE = os.path.join(basedir, 'lastscrape.txt')
-API_KEY = 'password'
+API_KEY = '1F4F320E-66A0-4F14-BA09-CBA22F1F9CE9'
 
 # JSONify dates in ISO 8601 format
 dthandler = lambda obj: (
