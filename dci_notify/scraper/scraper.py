@@ -16,6 +16,19 @@ import sys
 from time import sleep
 
 
+# Config directives
+MAIL_SERVER = 'smtp.mailgun.org'
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = 'postmaster@kevanahlquist.com'
+MAIL_PASSWORD = '7wo5fqm8u7n9'
+MAIL_DEFAULT_SENDER = 'sms@kevanahlquist.com'
+MAIL_SUPPRESS_SEND = False
+APP_SUPPRESS_POST = False
+RECIPIENT = 'ahlqu039@umn.edu'
+
+
 # Could probably ignore basedir, make file wherever script is running
 basedir = os.path.abspath(os.path.dirname(__file__))
 OUTFILE = os.path.join(basedir, 'lastscrape.txt')
