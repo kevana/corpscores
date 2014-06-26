@@ -36,7 +36,7 @@ def send_scores(data):
     msg = render_template_string(score_template, event=data)
     print('msg: %s' % msg)
     for user in User.query.filter_by(phone_active=True):
-        # send_sms(user.carrier, user.phone_num, msg)
+        send_sms(user.carrier, user.phone_num, msg)
         print('Sent scores to user %s' % user.username)
 
 
