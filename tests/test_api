@@ -1,0 +1,28 @@
+# -*- coding: utf-8 -*-
+'''API tests.'''
+import pytest
+
+from dci_notify.scraper.scraper import eqIn
+
+
+# Helpr functions
+class TestHelpers:
+
+    def test_eqIn():
+        assert eqIn(5, [4, 5])
+        assert eqIn(5, set([4, 5]))
+        assert eqIn('5', ['3'])
+        assert eqIn(u'5', [u'4', u'5'])
+
+    def test_not_eqIn():
+        assert not eqIn(2, [5])
+        assert not eqIn(u'5', ['5'])
+        assert not eqIn(u'3', [u'5'])
+
+
+class TestRoutes:
+    # Malformed json
+
+    # without api_key
+
+    # Working example

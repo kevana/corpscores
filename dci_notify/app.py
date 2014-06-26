@@ -14,7 +14,7 @@ from dci_notify.extensions import (
     debug_toolbar,
     mail
 )
-from dci_notify import public, user
+from dci_notify import public, user, api
 
 
 def create_app(config_object=ProdConfig):
@@ -48,6 +48,7 @@ def register_extensions(app):
 def register_blueprints(app):
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(user.views.blueprint)
+    app.register_blueprint(api.blueprint)
     return None
 
 

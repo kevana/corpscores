@@ -13,8 +13,10 @@ from dci_notify.database import db
 
 if os.environ.get("DCI_NOTIFY_ENV") == 'prod':
     app = create_app(ProdConfig)
+    print('App created with ProdConfig')
 else:
     app = create_app(DevConfig)
+    print('App created with DevConfig')
 
 manager = Manager(app)
 TEST_CMD = "py.test tests"
