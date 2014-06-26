@@ -10,17 +10,36 @@ from flask.ext.mail import Message
 from .extensions import mail
 
 
+def split_msg(message):
+    '''Split an sms into 160char chunks, if possible at newlines.'''
+    chunks = []
+    while len(message) > 160:
+        # Split message into chunks gracefully at newlines
+        try:
+            idx = message[:160].rindex('\n')
+        except ValueError:
+            # No newline found in first 160 characters
+            idx = 159
+        chunks.append(message[:idx])
+        message = message[idx:]
+    if message:
+        chunks.append(message)
+    return chunks
+
+
 def send_sms(carrier, number, message, subject=None):
     '''Send an SMS message'''
-    if subject:
-        msg = Message(subject,
-                      recipients=[str(number) + carriers[carrier]['suffix']])
-    else:
-        msg = Message('',
-                      recipients=[str(number) + carriers[carrier]['suffix']])
-    msg.body = message
-    print('Sending to %s Carrier: %s' % (number, carrier))
-    mail.send(msg)
+    chunks = split_msg(message)
+    for chunk in chunks:
+        if subject:
+            msg = Message(subject,
+                          recipients=[str(number) + carriers[carrier]['suffix']])
+        else:
+            msg = Message('',
+                          recipients=[str(number) + carriers[carrier]['suffix']])
+        msg.body = chunk
+        print('Sending to %s Carrier: %s' % (number, carrier))
+        mail.send(msg)
 
 # US Carriers
 carriers = {
