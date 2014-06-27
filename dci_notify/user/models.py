@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import datetime as dt
 
+from flask import render_template
 from flask.ext.login import UserMixin
+from flask.ext.mail import Message
 
-from dci_notify.extensions import bcrypt
+from dci_notify.extensions import bcrypt, mail
 from dci_notify.database import (
     Column,
     db,
@@ -12,7 +14,7 @@ from dci_notify.database import (
     relationship,
     SurrogatePK,
 )
-from dci_notify.sms import carrier_slugs
+from dci_notify.sms import carrier_slugs, send_sms
 
 
 class Role(SurrogatePK, Model):
@@ -50,6 +52,13 @@ class User(UserMixin, SurrogatePK, Model):
             self.set_password(password)
         else:
             self.password = None
+        # Send Email and SMS confirmation messages
+        message = 'You are now signed up for CorpScores.'
+        if self.carrier and self.phone_num:
+            send_sms(self.carrier, self.phone_num, message)
+        msg = Message('CorpScores Registration Confirmation', recipients=[self.email])
+        msg.body = render_template('users/reg_confirm.txt')
+        mail.send(msg)
 
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password)

@@ -42,6 +42,7 @@ def register_extensions(app):
     migrate.init_app(app, db)
     admin.init_app(app)
     mail.init_app(app)
+    mail.app = app
     return None
 
 
