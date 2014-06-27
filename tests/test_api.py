@@ -8,6 +8,7 @@ from dci_notify.api import send_scores
 
 VALID_EVENT = '''
 {
+  "api_key": "password",
   "city": "Mesa",
   "date": "2014-06-26T00:00:00",
   "name": "Southwest Corps Connection ",
@@ -57,7 +58,7 @@ class TestHelpers:
         event = json.loads(VALID_EVENT)
         with mail.record_messages() as outbox:
             send_scores(event)
-            assert len(outbox) =! 0
+            assert len(outbox) != 0
             print(outbox[0].body)
 
 

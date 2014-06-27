@@ -20,6 +20,7 @@ class Config(object):
     MAIL_USERNAME = 'example@example.com'
     MAIL_PASSWORD = 'password'
     MAIL_DEFAULT_SENDER = 'noreply@example.com'
+    SMS_DEFAULT_SENDER = 'sms@example.com'
     # Logging setup
     ADMINS = ['admin@example.com.com']
     LOGGING_SENDER = 'dci-notify-server-error@example.com'
