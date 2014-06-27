@@ -33,9 +33,11 @@ def send_sms(carrier, number, message, subject=None):
     for chunk in chunks:
         if subject:
             msg = Message(subject,
+                          sender=mail.app.config['SMS_DEFAULT_SENDER'],
                           recipients=[str(number) + carriers[carrier]['suffix']])
         else:
             msg = Message('',
+                          sender=mail.app.config['SMS_DEFAULT_SENDER'],
                           recipients=[str(number) + carriers[carrier]['suffix']])
         msg.body = chunk
         print('Sending to %s Carrier: %s' % (number, carrier))
