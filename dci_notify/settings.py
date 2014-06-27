@@ -19,7 +19,8 @@ class Config(object):
     MAIL_USE_SSL = True
     MAIL_USERNAME = 'postmaster@kevanahlquist.com'
     MAIL_PASSWORD = '7wo5fqm8u7n9'
-    MAIL_DEFAULT_SENDER = 'sms@kevanahlquist.com'
+    MAIL_DEFAULT_SENDER = 'noreply@kevanahlquist.com'
+    SMS_DEFAULT_SENDER = 'sms@kevanahlquist.com'
     # Logging setup
     ADMINS = ['kevan@kevanahlquist.com']
     LOGGING_SENDER = 'CorpScores-server-error@kevanahlquist.com'
