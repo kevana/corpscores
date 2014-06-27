@@ -5,7 +5,11 @@ from flask import (abort, Blueprint, request, render_template, flash,
                    make_response, url_for, redirect, session, jsonify,
                    render_template_string)
 from flask.ext.login import current_user
+from flask.ext.mail import Message
 from sqlalchemy.dialects.postgresql import JSON
+# Imports for profiling
+import time
+from dci_notify.extensions import mail
 
 from datetime import datetime
 from dci_notify.database import SurrogatePK
@@ -29,15 +33,29 @@ score_template = '''{{event.name}} - {{event.date.strftime('%b %d')}}, {{event.c
 
 
 def send_scores(data):
-    print('Received Data:')
-    print(data)
     date = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S')
     data['date'] = date
     msg = render_template_string(score_template, event=data)
 
+    # Super simple profiling
+    start_time = time.time()
     with mail.connect() as conn:
         for user in User.query.filter_by(phone_active=True):
             send_sms(user.carrier, user.phone_num, msg, conn=conn)
+
+    elapsed_time = time.time() - start_time
+    admin_msg = Message('CorpScores Event Stats',
+                        sender=mail.app.config['SMS_DEFAULT_SENDER'],
+                        recipients=['ahlqu039@umn.edu'])
+    admin_msg.body = '''
+    Total Users: %d
+    Message Length: %d
+    Message: %s
+    Elapsed time: %f''' % (len(User.query.filter_by(phone_active=True).all()),
+                           len(msg),
+                           msg,
+                           elapsed_time)
+    mail.send(admin_msg)
 
 
 #class Event(SurrogatePK, Model):
