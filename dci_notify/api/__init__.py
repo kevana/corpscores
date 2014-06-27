@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 '''API Module for CorpScores.'''
 
-from flask import (Blueprint, request, render_template, flash,
+from flask import (abort, Blueprint, request, render_template, flash,
                    make_response, url_for, redirect, session, jsonify,
                    render_template_string)
 from flask.ext.login import current_user
@@ -34,9 +34,10 @@ def send_scores(data):
     date = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S')
     data['date'] = date
     msg = render_template_string(score_template, event=data)
-    print('msg: %s' % msg)
-    for user in User.query.filter_by(phone_active=True):
-        send_sms(user.carrier, user.phone_num, msg)
+
+    with mail.connect() as conn:
+        for user in User.query.filter_by(phone_active=True):
+            send_sms(user.carrier, user.phone_num, msg, conn=conn)
 
 
 #class Event(SurrogatePK, Model):

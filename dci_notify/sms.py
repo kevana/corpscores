@@ -27,7 +27,7 @@ def split_msg(message):
     return chunks
 
 
-def send_sms(carrier, number, message, subject=None):
+def send_sms(carrier, number, message, subject=None, conn=None):
     '''Send an SMS message'''
     chunks = split_msg(message)
     for chunk in chunks:
@@ -41,7 +41,10 @@ def send_sms(carrier, number, message, subject=None):
                           recipients=[str(number) + carriers[carrier]['suffix']])
         msg.body = chunk
         print('Sending to %s Carrier: %s' % (number, carrier))
-        mail.send(msg)
+        if conn:
+            conn.send(msg)
+        else:
+            mail.send(msg)
 
 # US Carriers
 carriers = {
