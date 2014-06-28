@@ -36,48 +36,6 @@ class TestRegisterForm:
         assert form.validate() is False
         assert 'Phone number already registered' in form.phone_num.errors
 
-    def test_validate_strings_too_long(self, user):
-        # Username
-        form = RegisterForm(username='u'*81, email='foo@bar.com',
-                            carrier='at&t', phone_num='5551234567',
-                            password='example', confirm='example')
-        assert form.validate() is False
-        assert 'Field must be between 3 and 25 characters long.' in form.username.errors
-        # Email
-        form = RegisterForm(username='unique', email='foo@'+'bar'*25+'.com',
-                            carrier='at&t', phone_num='5551234567',
-                            password='example', confirm='example')
-        assert form.validate() is False
-        assert 'Field must be between 6 and 40 characters long.' in form.email.errors
-        # First Name
-        form = RegisterForm(username='unique', email='foo@bar.com',
-                            carrier='at&t', phone_num='5551234567',
-                            password='example', confirm='example',
-                            first_name='a'*100)
-        assert form.validate() is False
-        assert 'Field cannot be longer than 30 characters.' in form.first_name.errors
-        # Last Name
-        form = RegisterForm(username='unique', email='foo@bar.com',
-                            carrier='at&t', phone_num='5551234567',
-                            password='example', confirm='example',
-                            last_name='a'*100)
-        assert form.validate() is False
-        assert 'Field cannot be longer than 30 characters.' in form.last_name.errors
-        # Corps
-        form = RegisterForm(username='unique', email='foo@bar.com',
-                            carrier='at&t', phone_num='5551234567',
-                            password='example', confirm='example',
-                            corps='a'*100)
-        assert form.validate() is False
-        assert 'Field cannot be longer than 80 characters.' in form.corps.errors
-        # Phone number
-        form = RegisterForm(username='unique', email='foo@bar.com',
-                            carrier='at&t', phone_num='55512345671111111',
-                            password='example', confirm='example',
-                            first_name='a'*100)
-        assert form.validate() is False
-        assert 'Field must be between 10 and 10 characters long.' in form.phone_num.errors
-
     def test_validate_success_no_names(self, db):
         form = RegisterForm(username='newusername', email='new@test.test',
                             carrier='at&t', phone_num='5551234567',
@@ -88,8 +46,7 @@ class TestRegisterForm:
         form = RegisterForm(username='newusername', email='new@test.test',
                             carrier='at&t', phone_num='5551234567',
                             first_name='John', last_name='Smith',
-                            password='example', confirm='example',
-                            corps='Bluecoats')
+                            password='example', confirm='example')
         assert form.validate() is True
 
 

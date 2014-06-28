@@ -50,7 +50,6 @@ def register():
                                email=form.email.data,
                                first_name=form.first_name.data,
                                last_name=form.last_name.data,
-                               corps=form.corps.data,
                                password=form.password.data,
                                carrier=form.carrier.data,
                                phone_num=form.phone_num.data,
