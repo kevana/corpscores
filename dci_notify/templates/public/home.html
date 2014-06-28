@@ -1,34 +1,32 @@
 
 {% extends "layout.html" %}
 {% block content %}
-<!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
 
-  <h1><i class="fa fa-mobile"></i> Welcome to CorpScores</h1>
+  <h1><i class="fa fa-mobile fa-lg fa-2x"></i> Welcome to CorpScores</h1>
 
   <p>Sign up to receive competition results via text message as soon as they are posted by DCI.</p>
   <p><a href="/register" class="btn btn-primary btn-large">Get Started &raquo;</a></p>
-</div><!-- /.jumbotron -->
-<!--
+</div>
+
 <div class="body-content">
   <div class="row">
     <div class="col-lg-4">
-      <h2><i class="fa fa-code"></i> Bootstrap 3</h2>
-      <p>Sleek, intuitive, and powerful mobile-first front-end framework for faster and easier web development.</p>
-      <p><a class="btn btn-default" href="http://getbootstrap.com/">Official website &raquo;</a></p>
+      <h2><i class="fa fa-flash fa-fw fa-2x"></i> Lightning Fast</h2>
+      <p>Stop refreshing the DCI.org scores page. CorpScores pushes scores to you the minute they are updated by DCI.</p>
     </div>
     <div class="col-lg-4">
-      <h2><i class="fa fa-flask"></i> SQLAlchemy</h2>
-      <p>SQLAlchemy is the Python SQL toolkit and Object Relational Mapper that gives application developers the full power and flexibility of SQL.</p>
-      <p><a href="http://www.sqlalchemy.org/" class="btn btn-default" href="#">Official website &raquo;</a></p>
-   </div>
-    <div class="col-lg-4">
-      <h2><i class="fa fa-edit"></i> WTForms</h2>
-      <p>WTForms is a flexible forms validation and rendering library for python web development.</p>
-      <p><a href="http://wtforms.simplecodes.com/" class="btn btn-default" href="#">Official website &raquo;</a></p>
+      <h2><span class="fa-stack">
+        <i class="fa fa-ban fa-fw fa-stack-2x text-danger"></i>
+        <i class="fa fa-dollar fa-fw fa-stack-1x"></i>
+        </span> Completely Free</h2>
+      <p>There is no charge to use this service other than your carrier's standard SMS rates. All major US carriers are supported.</p>
     </div>
-  </div><!- /.row 
--->
+    <div class="col-lg-4">
+      <h2><i class="fa fa-wrench fa-fw fa-2x"></i> Open Source</h2>
+      <p>CorpScores is completely open source. You can view the source code and join feature discussions on Github.</p>
+      <p><a href="//github.com/kevana/dci-notify2" class="btn btn-default" href="#">Github Project &raquo;</a></p>
+    </div>
+  </div>
 </div>
-
 {% endblock %}
