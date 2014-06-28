@@ -58,8 +58,7 @@ class TestHelpers:
         event = json.loads(VALID_EVENT)
         with mail.record_messages() as outbox:
             send_scores(event)
-            assert len(outbox) =! 0
-            print(outbox[0].body)
+            assert len(outbox) != 0
 
 
 class TestRoutes:

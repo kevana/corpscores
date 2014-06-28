@@ -12,16 +12,17 @@ from .extensions import mail
 
 def split_msg(message):
     '''Split an sms into 160char chunks, if possible at newlines.'''
+    max_len = 130
     chunks = []
-    while len(message) > 160:
+    while len(message) > max_len:
         # Split message into chunks gracefully at newlines
         try:
-            idx = message[:160].rindex('\n')
+            idx = message[:max_len].rindex('\n')
         except ValueError:
-            # No newline found in first 160 characters
-            idx = 159
-        chunks.append(message[:idx])
-        message = message[idx:]
+            # No newline found in first max_len characters
+            idx = max_len
+        chunks.append(message[:max_len])
+        message = message[max_len:].strip()
     if message:
         chunks.append(message)
     return chunks
@@ -40,7 +41,6 @@ def send_sms(carrier, number, message, subject=None, conn=None):
                           sender=mail.app.config['SMS_DEFAULT_SENDER'],
                           recipients=[str(number) + carriers[carrier]['suffix']])
         msg.body = chunk
-        print('Sending to %s Carrier: %s' % (number, carrier))
         if conn:
             conn.send(msg)
         else:
