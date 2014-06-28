@@ -40,7 +40,6 @@ class User(UserMixin, SurrogatePK, Model):
     created_at = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
     first_name = Column(db.String(30), nullable=True)
     last_name = Column(db.String(30), nullable=True)
-    corps = Column(db.String(80), nullable=True)
     carrier = Column(db.Enum(*carrier_slugs, name='Carriers'), nullable=True)
     phone_num = Column(db.String(10), unique=True, nullable=True)
     phone_active = Column(db.Boolean(), default=False)
