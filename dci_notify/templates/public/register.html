@@ -1,49 +1,92 @@
 
 {% extends "layout.html" %}
 {% block content %}
-<div class="container-narrow">
+<div class="container">
   <h1>Register</h1>
     <br/>
-    <form id="registerForm" class="form form-register" method="POST" action="" role="form">
+    <form id="registerForm" class="form-inline form-register" method="POST" action="" role="form">
             {{ form.hidden_tag() }}
-            <div class="form-group">
-                {{form.username.label}}
-                {{form.username(placeholder="Username", class_="form-control")}}
+            <div class="row">
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{form.username.label}}
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                        {{form.username(placeholder="Username", class_="form-control")}}
+                    </div>
+                </div>
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{form.email.label}}
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                        {{form.email(placeholder="Email", class_="form-control")}}
+                    </div>
+                </div>
+            </div><!--/row-->
+            <div class="row">
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{form.carrier.label}}
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                        {{form.carrier(**{"data-placeholder":"Choose your mobile carrier...", "class":"form-control chosen-select", "id":"carrier-input"})}}
+                    </div>
+                </div>
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{form.phone_num.label}}
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                        {{form.phone_num(placeholder="(555) 789-1234", class_="form-control")}}
+                    </div>
+                </div>
+            </div><!--/row-->
+            <div class="row">
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{form.password.label}}
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-asterisk fa-fw"></i></span>
+                        {{form.password(placeholder="Password", class_="form-control")}}
+                    </div>
+                </div>
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{form.confirm.label}}
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-asterisk fa-fw"></i></span>
+                        {{form.confirm(placeholder="Password (again)", class_="form-control")}}
+                    </div>
+                </div>
+            </div><!--/row-->
+            <div class="row">
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{form.first_name.label}}
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                        {{form.first_name(placeholder="First Name (optional)", class_="form-control")}}
+                    </div>
+                </div>
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{form.last_name.label}}
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                        {{form.last_name(placeholder="Last Name (optional)", class_="form-control")}}
+                    </div>
+                </div>
+            </div><!--/row-->
+            <div class="row">
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{form.corps.label}}
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-music fa-fw"></i></span>
+                        {{form.corps(placeholder="Corps (optional)", class_="form-control")}}
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                {{form.email.label}}
-                {{form.email(placeholder="Email", class_="form-control")}}
+            <br>
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-4">
+                    <input class="btn btn-default btn-submit" type="submit" value="Register">
+                </div>
             </div>
-            <div class="form-group">
-                {{form.carrier.label}}
-                {{form.carrier(placeholder="Carrier", class_="form-control chosen-select")}}
-            </div>
-            <div class="form-group">
-                {{form.phone_num.label}}
-                {{form.phone_num(placeholder="(555) 789-1234", class_="form-control")}}
-            </div>
-            <div class="form-group">
-                {{form.password.label}}
-                {{form.password(placeholder="Password", class_="form-control")}}
-            </div>
-            <div class="form-group">
-                {{form.confirm.label}}
-                {{form.confirm(placeholder="Password (again)", class_="form-control")}}
-            </div>
-            <div class="form-group">
-                {{form.first_name.label}}
-                {{form.first_name(placeholder="First Name (optional)", class_="form-control")}}
-            </div>
-            <div class="form-group">
-                {{form.last_name.label}}
-                {{form.last_name(placeholder="Last Name (optional)", class_="form-control")}}
-            </div>
-            <div class="form-group">
-                {{form.corps.label}}
-                {{form.corps(placeholder="Corps (optional)", class_="form-control")}}
-            </div>
-            <p><input class="btn btn-default btn-submit" type="submit" value="Register"></p>
     </form>
+    <br>
     <p><em>Already registered?</em> Click <a href="/">here</a> to login.</p>
 </div>
 {% endblock %}
@@ -52,7 +95,7 @@
 <script type="text/javascript">
     (function($, window) {
         $('#phone_num').mask('(000) 000-0000');
-        $(".chosen-select").chosen();
+        $(".chosen-select").chosen(); //{inherit_select_classes: true});
     }).call(this, $, window);
     $('form').bind('submit', function(){
         $('#phone_num').unmask();
