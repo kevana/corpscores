@@ -21,8 +21,8 @@ def split_msg(message):
         except ValueError:
             # No newline found in first max_len characters
             idx = max_len
-        chunks.append(message[:max_len])
-        message = message[max_len:].strip()
+        chunks.append(message[:idx])
+        message = message[idx:].strip()
     if message:
         chunks.append(message)
     return chunks

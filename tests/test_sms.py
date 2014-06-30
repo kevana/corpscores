@@ -20,10 +20,10 @@ class TestSplitMessage:
         assert len(chunks) is 4
 
     def test_split_msg_line_breaks(self):
-        msg = 'a' * 130 + '\n' + 'b' * 40
+        msg = 'a' * 120 + '\n' + 'b' * 40
         chunks = split_msg(msg)
         assert len(chunks) is 2
-        assert len(chunks[0]) == 130
+        assert len(chunks[0]) == 120
 
     def test_split_msg_one_line(self):
         msg = 'a' * 160 + 'b' * 20
