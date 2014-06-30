@@ -12,6 +12,7 @@ import time
 from dci_notify.extensions import mail
 
 from datetime import datetime
+from dci_notify.async import async
 from dci_notify.database import SurrogatePK
 from dci_notify.extensions import db
 from dci_notify.database import (
@@ -31,17 +32,16 @@ score_template = '''{{event.name}} - {{event.date.strftime('%b %d')}}, {{event.c
 {{corp.place}}. {{corp.score}}-{{corp.corps}}
 {% endfor %}'''
 
-
-def send_scores(data):
-    date = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S')
-    data['date'] = date
-    msg = render_template_string(score_template, event=data)
-
+@async
+def async_send_scores(message):
     # Super simple profiling
     start_time = time.time()
-    with mail.connect() as conn:
-        for user in User.query.filter_by(phone_active=True):
-            send_sms(user.carrier, user.phone_num, msg, conn=conn)
+
+    with mail.app.app_context():
+        with mail.connect() as conn:
+            for user in User.query.filter_by(phone_active=True):
+                send_sms(user.carrier, user.phone_num, message, conn=conn)
+        num_users = len(User.query.filter_by(phone_active=True).all())
 
     elapsed_time = time.time() - start_time
     admin_msg = Message('CorpScores Event Stats',
@@ -51,11 +51,19 @@ def send_scores(data):
     Total Users: %d
     Message Length: %d
     Message: %s
-    Elapsed time: %f''' % (len(User.query.filter_by(phone_active=True).all()),
-                           len(msg),
-                           msg,
+    Elapsed time: %f''' % (num_users,
+                           len(message),
+                           message,
                            elapsed_time)
-    mail.send(admin_msg)
+    with mail.app.app_context():
+        mail.send(admin_msg)
+
+def send_scores(data):
+    date = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S')
+    data['date'] = date
+    msg = render_template_string(score_template, event=data)
+
+    async_send_scores(message=msg)
 
 
 #class Event(SurrogatePK, Model):
