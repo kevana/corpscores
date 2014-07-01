@@ -12,7 +12,8 @@ from dci_notify.extensions import (
     login_manager,
     migrate,
     debug_toolbar,
-    mail
+    mail,
+    sentry
 )
 from dci_notify import public, user, api
 
@@ -43,6 +44,7 @@ def register_extensions(app):
     admin.init_app(app)
     mail.init_app(app)
     mail.app = app
+    sentry.init_app(app)
     return None
 
 

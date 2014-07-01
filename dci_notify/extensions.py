@@ -23,3 +23,6 @@ debug_toolbar = DebugToolbarExtension()
 
 from flask.ext.mail import Mail
 mail = Mail()
+
+from raven.contrib.flask import Sentry
+sentry = Sentry()

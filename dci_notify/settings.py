@@ -27,6 +27,7 @@ class Config(object):
     MAIL_SUPPRESS_SEND = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
                                              'postgresql://localhost/app')
+    SENTRY_DSN = 'https://abb796cb20cc41558394113562b26680:c3d0ca93300140fe8c1d2c9dac1c7076@app.getsentry.com/26768'
 
 
 class ProdConfig(Config):
