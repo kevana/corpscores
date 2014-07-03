@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 '''Public section, including homepage and signup.'''
 from flask import (Blueprint, request, render_template, flash, url_for,
-                   redirect, session)
+                   redirect, session, send_from_directory)
 from flask.ext.login import login_user, login_required, logout_user
 
 from dci_notify.extensions import login_manager
@@ -67,3 +67,7 @@ def register():
 def about():
     form = LoginForm(request.form)
     return render_template("public/about.html", form=form)
+
+@blueprint.route("/humans.txt")
+def humans():
+    return send_from_directory(blueprint.static_folder, "humans.txt")
