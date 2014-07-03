@@ -4,7 +4,7 @@ import urlparse
 
 
 class Config(object):
-    SECRET_KEY = '117E9348-0CB8-4127-AA48-8E6FD1057CF7'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
     BCRYPT_LOG_ROUNDS = 13
@@ -17,8 +17,8 @@ class Config(object):
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = 'postmaster@kevanahlquist.com'
-    MAIL_PASSWORD = '7wo5fqm8u7n9'
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME', 'postmaster@example.com')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', '<example_password>')
     MAIL_DEFAULT_SENDER = 'noreply@kevanahlquist.com'
     SMS_DEFAULT_SENDER = 'sms@kevanahlquist.com'
     # Logging setup
@@ -27,7 +27,7 @@ class Config(object):
     MAIL_SUPPRESS_SEND = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
                                              'postgresql://localhost/app')
-    SENTRY_DSN = 'https://abb796cb20cc41558394113562b26680:c3d0ca93300140fe8c1d2c9dac1c7076@app.getsentry.com/26768'
+    SENTRY_DSN = os.environ.get('SENTRY_DSN')
 
 
 class ProdConfig(Config):

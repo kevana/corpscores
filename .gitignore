@@ -46,5 +46,8 @@ docs/_build
 # Virtualenvs
 env
 
+# Foreman env
+.env
+
 # Databases
 *.db
