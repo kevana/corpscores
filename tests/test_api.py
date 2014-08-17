@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
-'''API tests.'''
+'''
+API tests.
+'''
+
 import json
 import pytest
 
-from dci_notify.scraper.scraper import eqIn
 from dci_notify.api import send_scores
+from dci_notify.scraper.scraper import eqIn
 from .factories import UserFactory
 
 
 VALID_EVENT = '''
 {
-  "api_key": "1F4F320E-66A0-4F14-BA09-CBA22F1F9CE9",
+  "api_key": "API_KEY",
   "city": "Mesa",
   "date": "2014-06-26T00:00:00",
   "name": "Southwest Corps Connection ",
@@ -41,9 +44,8 @@ VALID_EVENT = '''
 '''
 
 
-# Helpr functions
 class TestHelpers:
-
+    '''Tests for helper methods.'''
     def test_eqIn(self):
         assert eqIn(5, [4, 5])
         assert eqIn(5, set([4, 5]))
@@ -77,13 +79,13 @@ class TestRoutes:
 
     # Working example
     def test_events_success(self, app, db, testapp, user):
-    	mail = app.extensions['mail']
-    	user.save() # Commit to test db
-    	user_two = UserFactory()
-    	print(user)
-    	url = '/events/'
-    	headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-    	with mail.record_messages() as outbox:
-    		r = testapp.post(url, VALID_EVENT, headers=headers)
-    		assert r.status_code == 200
-    		# assert len(outbox) == 3
+        mail = app.extensions['mail']
+        user.save() # Commit to test db
+        user_two = UserFactory()
+        print(user)
+        url = '/events/'
+        headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+        with mail.record_messages() as outbox:
+            r = testapp.post(url, VALID_EVENT, headers=headers)
+            assert r.status_code == 200
+            # assert len(outbox) == 3

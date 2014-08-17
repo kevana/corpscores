@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+'''
+Views for the user module of CorpScores.
+'''
+
 from flask import Blueprint, render_template
 from flask.ext.login import login_required
 

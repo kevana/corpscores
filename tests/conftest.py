@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
-"""Defines fixtures available to all tests."""
+'''
+Defines fixtures available to all tests.
+'''
+
 import os
 
 import pytest
 from webtest import TestApp
 
-from dci_notify.settings import TestConfig
 from dci_notify.app import create_app
 from dci_notify.database import db as _db
+from dci_notify.settings import TestConfig
 
 from .factories import UserFactory
 

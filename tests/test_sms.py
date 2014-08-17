@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-'''SMS tests'''
-import pytest
-
+'''
+SMS tests.
+'''
 
 from dci_notify.extensions import mail
 from dci_notify.sms import split_msg, send_sms

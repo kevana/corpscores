@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
+'''
+Settings module, contains config objects for Dev, Test, and Prod environments.
+'''
+
 import os
-import urlparse
 
 
 class Config(object):
+    '''Base configuration common to all environments.'''
     SECRET_KEY = os.environ.get('SECRET_KEY', 'NOT_A_SECRET_KEY')
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
@@ -32,14 +36,14 @@ class Config(object):
 
 
 class ProdConfig(Config):
-    """Production configuration."""
+    '''Production configuration.'''
     ENV = 'prod'
     DEBUG = False
     DEBUG_TB_ENABLED = False  # Disable Debug toolbar
 
 
 class DevConfig(Config):
-    """Development configuration."""
+    '''Development configuration.'''
     ENV = 'dev'
     DEBUG = True
     DEBUG_TB_ENABLED = True
@@ -48,6 +52,7 @@ class DevConfig(Config):
 
 
 class TestConfig(Config):
+    '''Test configuration.'''
     TESTING = True
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite://'

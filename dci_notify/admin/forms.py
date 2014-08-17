@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
+'''
+Forms for the admin module of CorpScores.
+'''
+
 from flask_wtf import Form
-from wtforms import TextAreaField, TextField, SelectMultipleField
+from wtforms import TextAreaField, SelectMultipleField
 from wtforms.validators import DataRequired, Length
 
 from dci_notify.user.models import User
 
 
 class SendMessageForm(Form):
+    '''Form to send SMS messages to users from the admin console.'''
     users = SelectMultipleField('Send to', coerce=int,
                                 validators=[DataRequired()])
     message = TextAreaField('Message',

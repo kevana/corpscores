@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-import pytest
+'''
+Form tests.
+'''
 
 from dci_notify.admin.forms import SendMessageForm
 from dci_notify.public.forms import LoginForm
 from dci_notify.user.forms import RegisterForm
-from .factories import UserFactory
 
 
 class TestRegisterForm:

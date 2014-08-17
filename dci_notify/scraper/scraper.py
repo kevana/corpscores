@@ -2,6 +2,7 @@
 '''
 Monitor the dci.org website for new score postings.
 '''
+
 from __future__ import print_function
 
 #Initialize Sentry before others, requires SENTRY_DSN environment variable

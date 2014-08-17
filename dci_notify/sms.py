@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-"""SMS functions for app.
+'''
+SMS functions for CorpScores.
 
 Special thanks to github.com/brendanlim/sms-fu for the carrier gateways.
-"""
+'''
 
 
 from flask.ext.mail import Message

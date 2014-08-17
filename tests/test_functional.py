@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-'''Functional tests using WebTest.
+'''
+Functional tests using WebTest.
 
 See: http://webtest.readthedocs.org/
 '''
-import pytest
+
 from flask import url_for
 
 

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-'''The admin module, containing Flask-Admin.'''
-from flask.ext.login import current_user
+'''
+The admin module, containing Flask-Admin.
+'''
+
 from flask.ext.admin import Admin, BaseView, expose
 from flask.ext.admin.contrib.sqla import ModelView
+from flask.ext.login import current_user
 
 from dci_notify.admin.forms import SendMessageForm
-from dci_notify.database import SurrogatePK
 from dci_notify.extensions import db
 from dci_notify.sms import send_sms
 from dci_notify.user.models import Role, User
@@ -13,11 +15,13 @@ from dci_notify.utils import flash_errors
 
 
 def send_messages(users, message):
+    '''Send a message to specified users.'''
     for user in users:
         send_sms(user.carrier, user.phone_num, message)
 
 
 class MyView(ModelView):
+    '''Authenticated-required view for database models.'''
     column_exclude_list = ('password')
 
     def is_accessible(self):
@@ -26,6 +30,7 @@ class MyView(ModelView):
 
 
 class MyBaseView(BaseView):
+    '''Admin view for sending SMS messages to users.'''
     def is_accessible(self):
         return (current_user.is_authenticated()
                 and current_user.is_admin)

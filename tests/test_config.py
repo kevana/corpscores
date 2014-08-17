@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+'''
+Configuration tests.
+'''
+
 from dci_notify.app import create_app
 from dci_notify.settings import ProdConfig, DevConfig
 

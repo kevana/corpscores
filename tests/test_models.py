@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Model unit tests."""
+'''
+Model unit tests.
+'''
+
 import datetime as dt
 
 import pytest

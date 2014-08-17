@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+'''
+Assets module for CorpScores.
+'''
+
 from flask.ext.assets import Bundle, Environment
 
 css = Bundle(

@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-'''API Module for CorpScores.'''
+'''
+API Module for CorpScores.
+'''
+
+from datetime import datetime
+import time
 
 from flask import (abort, Blueprint, request, render_template, flash,
                    make_response, url_for, redirect, session, jsonify,
@@ -7,33 +12,27 @@ from flask import (abort, Blueprint, request, render_template, flash,
 from flask.ext.login import current_user
 from flask.ext.mail import Message
 from sqlalchemy.dialects.postgresql import JSON
-# Imports for profiling
-import time
-from dci_notify.extensions import mail
 
-from datetime import datetime
 from dci_notify.async import async
-from dci_notify.database import SurrogatePK
-from dci_notify.extensions import db
 from dci_notify.database import (
     Column,
     db,
     Model,
     SurrogatePK
 )
-from dci_notify.user.models import User
-from pprint import pprint
+from dci_notify.extensions import db, mail
 from dci_notify.sms import send_sms
-
-api_key = '1F4F320E-66A0-4F14-BA09-CBA22F1F9CE9'
+from dci_notify.user.models import User
 
 score_template = '''{{event.name}} - {{event.date.strftime('%b %d')}}, {{event.city}} {{event.state}}
 {% for corp in event.results -%}
 {{corp.place}}. {{corp.score}}-{{corp.corps}}
 {% endfor %}'''
 
+
 @async
 def async_send_scores(message):
+    '''Send message to all users with active phones and a summary to '''
     # Super simple profiling
     start_time = time.time()
 
@@ -45,8 +44,8 @@ def async_send_scores(message):
 
     elapsed_time = time.time() - start_time
     admin_msg = Message('CorpScores Event Stats',
-                        sender=mail.app.config['SMS_DEFAULT_SENDER'],
-                        recipients=['ahlqu039@umn.edu'])
+                        sender=mail.app.config.get('SMS_DEFAULT_SENDER'),
+                        recipients=mail.app.config.get('ADMINS'))
     admin_msg.body = '''
     Total Users: %d
     Message Length: %d
@@ -58,7 +57,9 @@ def async_send_scores(message):
     with mail.app.app_context():
         mail.send(admin_msg)
 
+
 def send_scores(data):
+    '''Create a message from the given data and send it asynchronously.'''
     date = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S')
     data['date'] = date
     msg = render_template_string(score_template, event=data)
@@ -91,6 +92,7 @@ def unauthorized(e):
 
 @blueprint.before_request
 def check_api_key():
+    api_key = mail.app.config.get('API_KEY', 'API_KEY')
     data = request.get_json()
     if data is None or data['api_key'] != api_key:
         abort(403)

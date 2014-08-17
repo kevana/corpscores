@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-'''Public section, including homepage and signup.'''
+'''
+Public section, including homepage and signup.
+'''
+
 from flask import (Blueprint, request, render_template, flash, url_for,
-                   redirect, session, send_from_directory)
+                   redirect, send_from_directory)
 from flask.ext.login import login_user, login_required, logout_user
 
 from dci_notify.extensions import login_manager
@@ -9,14 +12,14 @@ from dci_notify.user.models import User
 from dci_notify.public.forms import LoginForm
 from dci_notify.user.forms import RegisterForm
 from dci_notify.utils import flash_errors
-from dci_notify.database import db
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
 
 
 @login_manager.user_loader
-def load_user(id):
-    return User.get_by_id(int(id))
+def load_user(userId):
+    '''Load a user based on their unique ID.'''
+    return User.get_by_id(int(userId))
 
 
 @blueprint.route("/", methods=["GET", "POST"])
@@ -46,16 +49,16 @@ def logout():
 def register():
     form = RegisterForm(request.form, csrf_enabled=False)
     if form.validate_on_submit():
-        new_user = User.create(username=form.username.data,
-                               email=form.email.data,
-                               first_name=form.first_name.data,
-                               last_name=form.last_name.data,
-                               corps=form.corps.data,
-                               password=form.password.data,
-                               carrier=form.carrier.data,
-                               phone_num=form.phone_num.data,
-                               phone_active=True,
-                               active=True)
+        User.create(username=form.username.data,
+                    email=form.email.data,
+                    first_name=form.first_name.data,
+                    last_name=form.last_name.data,
+                    corps=form.corps.data,
+                    password=form.password.data,
+                    carrier=form.carrier.data,
+                    phone_num=form.phone_num.data,
+                    phone_active=True,
+                    active=True)
         flash("Thank you for registering. You can now log in.", 'success')
         return redirect(url_for('public.home'))
     else:
@@ -67,6 +70,7 @@ def register():
 def about():
     form = LoginForm(request.form)
     return render_template("public/about.html", form=form)
+
 
 @blueprint.route("/humans.txt")
 def humans():

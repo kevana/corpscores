@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 '''
-Async decorator for CorpScores
+Async decorator for CorpScores.
 '''
 
 from threading import Thread

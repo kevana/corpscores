@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
-'''The app module, containing the app factory function.'''
+'''
+The app module, containing the app factory function.
+'''
 
 import os
+
 from flask import Flask, render_template
 
-from dci_notify.settings import ProdConfig, DevConfig, TestConfig
-from dci_notify.assets import assets
+from dci_notify import public, user, api
 from dci_notify.admin import admin
+from dci_notify.assets import assets
 from dci_notify.extensions import (
     bcrypt,
     cache,
@@ -17,7 +20,7 @@ from dci_notify.extensions import (
     mail,
     sentry
 )
-from dci_notify import public, user, api
+from dci_notify.settings import ProdConfig, DevConfig, TestConfig
 
 
 def create_app(config_object=None):

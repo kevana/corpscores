@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+'''
+Models for the user module of CorpScores.
+'''
+
 import datetime as dt
 
 from flask import render_template
@@ -18,6 +22,7 @@ from dci_notify.sms import carrier_slugs, send_sms
 
 
 class Role(SurrogatePK, Model):
+    '''Role database model.'''
     __tablename__ = 'roles'
     name = Column(db.String(80), unique=True, nullable=False)
     user_id = ReferenceCol('users', nullable=True)
@@ -31,7 +36,7 @@ class Role(SurrogatePK, Model):
 
 
 class User(UserMixin, SurrogatePK, Model):
-
+    '''User database model.'''
     __tablename__ = 'users'
     username = Column(db.String(80), unique=True, nullable=False)
     email = Column(db.String(80), unique=True, nullable=False)
@@ -57,7 +62,8 @@ class User(UserMixin, SurrogatePK, Model):
         message = 'You are now signed up for CorpScores.'
         if self.carrier and self.phone_num:
             send_sms(self.carrier, self.phone_num, message)
-        msg = Message('CorpScores Registration Confirmation', recipients=[self.email])
+        msg = Message('CorpScores Registration Confirmation',
+                      recipients=[self.email])
         msg.body = render_template('users/reg_confirm.txt')
         mail.send(msg)
 

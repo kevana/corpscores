@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+'''
+Object factories for testing.
+'''
+
 from factory import Sequence, PostGenerationMethodCall
 from factory.alchemy import SQLAlchemyModelFactory
 from random import randint
