@@ -4,7 +4,7 @@ Monitor the dci.org website for new score postings.
 '''
 from __future__ import print_function
 
-#Initialize Sentry, requires SENTRY_DSN environment variable
+#Initialize Sentry before others, requires SENTRY_DSN environment variable
 from raven import Client
 client = Client()
 
@@ -12,12 +12,12 @@ client = Client()
 from bs4 import BeautifulSoup
 from datetime import datetime
 from email.mime.text import MIMEText
+from requests.exceptions import ConnectionError
+from socket import error as SocketError
 import json
 import os
 import requests
 import smtplib
-import sys
-from time import sleep
 
 
 # Config directives
@@ -68,17 +68,23 @@ def send_email(text):
 
 def post_to_app(text):
     'Post event to app, text is a string containing a json object.'
-    headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+    headers = {'Content-type': 'application/json',
+               'Accept':       'application/json'}
     r = requests.post(API_POST_URL, data=text, headers=headers)
     if r.status_code != 200:
         raise IOError('Unable to post event to app: %s' % text)
 
 
 def process_event(event):
+    '''Retrieve, parse, and send the scores for the given event UUID.'''
     params = {'event': event}
-    r = requests.get('http://www.dci.org/scores/index.cfm', params=params)
+    try:
+        r = requests.get('http://www.dci.org/scores/index.cfm', params=params)
+    except (SocketError, ConnectionError):
+        return
     if r.status_code != 200:
-        raise IOError('Unable to load event: %s' % event)
+        return
+
     # Get coarse info out of page
     soup = BeautifulSoup(r.text)
     scoresTable = (soup.find_all('table')[5].
@@ -110,7 +116,10 @@ def process_event(event):
         eventResults.append(result)
     thisEvent['results'] = eventResults
     thisEvent['api_key'] = API_KEY
-    event_text = json.dumps(thisEvent, sort_keys=True, indent=2, default=dthandler)
+    event_text = json.dumps(thisEvent,
+                            sort_keys=True,
+                            indent=2,
+                            default=dthandler)
     send_email(event_text)
     add_processed_event(event)
     if not APP_SUPPRESS_POST:
@@ -118,11 +127,13 @@ def process_event(event):
 
 
 def set_processed_events(events):
+    '''Write all processed events out to persistent storage.'''
     with open(OUTFILE, 'w') as f:
         f.writelines('%s\n' % event for event in events)
 
 
 def get_processed_events():
+    '''Retrieve all processed events from persistent storage.'''
     try:
         with open(OUTFILE, 'r') as f:
             ret = f.readlines()
@@ -133,6 +144,7 @@ def get_processed_events():
 
 
 def add_processed_event(event):
+    '''Add a single new event to the processed events collection.'''
     events = get_processed_events()
     if event not in events:
         events += event
@@ -140,11 +152,19 @@ def add_processed_event(event):
 
 
 def scrape_func():
-    # Download scores page, compare list of UUIDs to the last one we saw
-    # URL redirects to the most recent score data
-    r = requests.get('http://www.dci.org/scores', allow_redirects=True)
+    '''Entry method when script is run.
+
+    Download scores page to obtain list of event UUIDs, compare to previously
+    processed events, process any new events.
+    '''
+
+    try:
+        # Base /scores URL redirects to the most recent score data
+        r = requests.get('http://www.dci.org/scores', allow_redirects=True)
+    except (SocketError, ConnectionError):
+        return
     if r.status_code != 200:
-        raise IOError('Unable to load dci.org/scores')
+        return
     soup = BeautifulSoup(r.text)
     try:
         options = soup.find('select').findChildren()
@@ -153,7 +173,8 @@ def scrape_func():
     current_events = [opt['value'] for opt in options]
 
     last_processed_events = get_processed_events()
-    diff = [item for item in current_events if not eqIn(item, last_processed_events)]
+    diff = [item for item in current_events if not eqIn(item,
+                                                        last_processed_events)]
     if diff:
         for event in diff:
             process_event(event)
