@@ -2,8 +2,9 @@
 DCI Notify
 ===============================
 
-This is the code that powers [CorpScores](corpscores.herokuapp.com).
+This is the code that powers CorpScores_.
 
+.. _CorpScores: http://corpscores.herokuapp.com
 
 Quickstart
 ----------
