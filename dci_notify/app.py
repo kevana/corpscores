@@ -28,13 +28,13 @@ def create_app(config_object=None):
     '''
 
     if not config_object:
-        if os.environ['DCI_NOTIFY_ENV'] == 'dev':
+        if os.environ.get('DCI_NOTIFY_ENV') == 'dev':
             config_object = DevConfig
             print('create_app using DevConfig based on DCI_NOTIFY_ENV')
-        elif os.environ['DCI_NOTIFY_ENV'] == 'test':
+        elif os.environ.get('DCI_NOTIFY_ENV') == 'test':
             config_object = TestConfig
             print('create_app using TestConfig based on DCI_NOTIFY_ENV')
-        elif os.environ['DCI_NOTIFY_ENV'] == 'prod':
+        elif os.environ.get('DCI_NOTIFY_ENV') == 'prod':
             config_object = ProdConfig
             print('create_app using ProdConfig based on DCI_NOTIFY_ENV')
         else:
