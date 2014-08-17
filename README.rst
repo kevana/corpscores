@@ -2,7 +2,7 @@
 DCI Notify
 ===============================
 
-Text message score updates.
+This is the code that powers [CorpScores](corpscores.herokuapp.com).
 
 
 Quickstart

@@ -4,6 +4,10 @@ Monitor the dci.org website for new score postings.
 '''
 from __future__ import print_function
 
+#Initialize Sentry, requires SENTRY_DSN environment variable
+from raven import Client
+client = Client()
+
 # Imports
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -108,6 +112,7 @@ def process_event(event):
     thisEvent['api_key'] = API_KEY
     event_text = json.dumps(thisEvent, sort_keys=True, indent=2, default=dthandler)
     send_email(event_text)
+    add_processed_event(event)
     if not APP_SUPPRESS_POST:
         post_to_app(event_text)
 
@@ -127,6 +132,13 @@ def get_processed_events():
     return ret
 
 
+def add_processed_event(event):
+    events = get_processed_events()
+    if event not in events:
+        events += event
+        set_processed_events(events)
+
+
 def scrape_func():
     # Download scores page, compare list of UUIDs to the last one we saw
     # URL redirects to the most recent score data
@@ -139,14 +151,12 @@ def scrape_func():
     except AttributeError:
         return None
     current_events = [opt['value'] for opt in options]
-    # If new event, send notification to my cell phone
+
     last_processed_events = get_processed_events()
     diff = [item for item in current_events if not eqIn(item, last_processed_events)]
     if diff:
         for event in diff:
             process_event(event)
-        # Update file with latest event uuid
-        set_processed_events(current_events)
 
 
 if __name__ == '__main__':
