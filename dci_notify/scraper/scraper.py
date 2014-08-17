@@ -21,18 +21,19 @@ MAIL_SERVER = 'smtp.mailgun.org'
 MAIL_PORT = 465
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
-MAIL_USERNAME = 'postmaster@kevanahlquist.com'
-MAIL_PASSWORD = '7wo5fqm8u7n9'
-MAIL_DEFAULT_SENDER = 'sms@kevanahlquist.com'
+MAIL_USERNAME = 'postmaster@example.com'
+MAIL_PASSWORD = 'example_password'
+MAIL_DEFAULT_SENDER = 'sms@example.com'
 MAIL_SUPPRESS_SEND = False
 APP_SUPPRESS_POST = False
-RECIPIENT = 'ahlqu039@umn.edu'
+API_POST_URL = 'http://corpscores.herokuapp.com/events/'
+RECIPIENT = 'admin@example.com'
 
 
-# Could probably ignore basedir, make file wherever script is running
+# May be able to ignore basedir, make file wherever script is running
 basedir = os.path.abspath(os.path.dirname(__file__))
 OUTFILE = os.path.join(basedir, 'lastscrape.txt')
-API_KEY = '1F4F320E-66A0-4F14-BA09-CBA22F1F9CE9'
+API_KEY = os.environ.get('API_KEY', 'API_KEY')
 
 # JSONify dates in ISO 8601 format
 dthandler = lambda obj: (
@@ -50,13 +51,11 @@ def eqIn(item, iterable):
 
 
 def send_email(text):
+    '''Send the raw event to an admin.'''
     msg = MIMEText(text)
     msg['Subject'] = 'New Event posted on DCI.org'
     msg['From'] = MAIL_DEFAULT_SENDER
     msg['To'] = RECIPIENT
-    #TODO: Get rid of this
-    print(msg['Subject'])
-    print(msg.as_string())
     if not MAIL_SUPPRESS_SEND:
         s = smtplib.SMTP(MAIL_SERVER)
         s.login(MAIL_USERNAME, MAIL_PASSWORD)
@@ -65,9 +64,8 @@ def send_email(text):
 
 def post_to_app(text):
     'Post event to app, text is a string containing a json object.'
-    url = 'http://localhost:5000/events/'
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-    r = requests.post(url, data=text, headers=headers)
+    r = requests.post(API_POST_URL, data=text, headers=headers)
     if r.status_code != 200:
         raise IOError('Unable to post event to app: %s' % text)
 
@@ -145,10 +143,7 @@ def scrape_func():
     last_processed_events = get_processed_events()
     diff = [item for item in current_events if not eqIn(item, last_processed_events)]
     if diff:
-        print('Diff:')
-        print(diff)
         for event in diff:
-            print('Processing event_id:  %s' % event)
             process_event(event)
         # Update file with latest event uuid
         set_processed_events(current_events)

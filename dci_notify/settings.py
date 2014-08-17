@@ -4,7 +4,7 @@ import urlparse
 
 
 class Config(object):
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'NOT_A_SECRET_KEY')
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
     BCRYPT_LOG_ROUNDS = 13
@@ -28,6 +28,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
                                              'postgresql://localhost/app')
     SENTRY_DSN = os.environ.get('SENTRY_DSN')
+    API_KEY = os.environ.get('API_KEY', 'API_KEY')
 
 
 class ProdConfig(Config):
