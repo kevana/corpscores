@@ -25,7 +25,8 @@ class UserFactory(BaseFactory):
 
     username = Sequence(lambda n: "user{0}".format(n))
     email = Sequence(lambda n: "user{0}@example.com".format(n))
-    phone_num = Sequence(lambda n: str(randint(1000000000, 9999999999)))
+    phone_num = Sequence(lambda n: '555' + str(randint(1000000, 9999999)))
     carrier = 'at&t'
     password = PostGenerationMethodCall('set_password', 'example')
     active = True
+    #phone_active = True

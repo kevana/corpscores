@@ -29,26 +29,29 @@ textarea {
   max-width: 700px;
 }
 
+/* Chosen modifications to match Bootstrap style */
+.chosen-single, .chosen-default {
+  height: 34px !important;
+  width: 100% !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.chosen-single > span {
+    font-size: 14px !important;
+    padding: 6px 4px !important;
+    line-height: 1.42857143;
+  }
+
+.chosen-container {
+  width: 100% !important;
+}
+
 /* Forms */
 
 .navbar-form input[type="text"],
 .navbar-form input[type="password"] {
   width: 180px;
-}
-
-
-.form-register {
-  width: 50%;
-}
-
-.form-register .form-control {
-  position: relative;
-  font-size: 16px;
-  height: auto;
-  padding: 10px;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
 }
 
 /* footer */

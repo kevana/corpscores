@@ -21,14 +21,14 @@ def split_msg(message):
         except ValueError:
             # No newline found in first max_len characters
             idx = max_len
-        chunks.append(message[:max_len])
-        message = message[max_len:].strip()
+        chunks.append(message[:idx])
+        message = message[idx:].strip()
     if message:
         chunks.append(message)
     return chunks
 
 
-def send_sms(carrier, number, message, subject=None):
+def send_sms(carrier, number, message, subject=None, conn=None):
     '''Send an SMS message'''
     chunks = split_msg(message)
     for chunk in chunks:
@@ -41,7 +41,10 @@ def send_sms(carrier, number, message, subject=None):
                           sender=mail.app.config['SMS_DEFAULT_SENDER'],
                           recipients=[str(number) + carriers[carrier]['suffix']])
         msg.body = chunk
-        mail.send(msg)
+        if conn:
+            conn.send(msg)
+        else:
+            mail.send(msg)
 
 # US Carriers
 carriers = {

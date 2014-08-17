@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 '''The app module, containing the app factory function.'''
+
+import os
 from flask import Flask, render_template
 
-from dci_notify.settings import ProdConfig
+from dci_notify.settings import ProdConfig, DevConfig, TestConfig
 from dci_notify.assets import assets
 from dci_notify.admin import admin
 from dci_notify.extensions import (
@@ -12,17 +14,33 @@ from dci_notify.extensions import (
     login_manager,
     migrate,
     debug_toolbar,
-    mail
+    mail,
+    sentry
 )
 from dci_notify import public, user, api
 
 
-def create_app(config_object=ProdConfig):
+def create_app(config_object=None):
     '''An application factory, as explained here:
         http://flask.pocoo.org/docs/patterns/appfactories/
 
     :param config_object: The configuration object to use.
     '''
+
+    if not config_object:
+        if os.environ.get('DCI_NOTIFY_ENV') == 'dev':
+            config_object = DevConfig
+            print('create_app using DevConfig based on DCI_NOTIFY_ENV')
+        elif os.environ.get('DCI_NOTIFY_ENV') == 'test':
+            config_object = TestConfig
+            print('create_app using TestConfig based on DCI_NOTIFY_ENV')
+        elif os.environ.get('DCI_NOTIFY_ENV') == 'prod':
+            config_object = ProdConfig
+            print('create_app using ProdConfig based on DCI_NOTIFY_ENV')
+        else:
+            config_object = ProdConfig
+            print('create_app defaulting to ProdConfig')
+
     app = Flask(__name__)
     app.config.from_object(config_object)
     register_extensions(app)
@@ -43,6 +61,8 @@ def register_extensions(app):
     admin.init_app(app)
     mail.init_app(app)
     mail.app = app
+    if not app.debug:
+        sentry.init_app(app)
     return None
 
 

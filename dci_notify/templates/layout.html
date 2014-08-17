@@ -8,15 +8,10 @@
 <head>
   <meta charset="utf-8">
 
-  <title>{% block page_title %}
-  
-    CorpScores
-  
-    {% endblock %}
-  </title>
-  <meta name="description" content="{% block meta_description %}{% endblock %}">
-  <meta name="author" content="{% block meta_author %}{% endblock %}">
-
+  <title>{% block page_title %}CorpScores{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}CorpScores allows you to receive DCI competition scores via SMS as soon as they are posted by DCI. It is a free service for DCI fans, members, and staff.{% endblock %}">
+  <meta name="author" content="{% block meta_author %}Kevan Ahlquist{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}DCI,scores,drum,corps,corpscores{% endblock %}">
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
   <meta name="viewport" content="width=device-width">
 
@@ -60,7 +55,6 @@
 
 {% include "footer.html" %}
 
-<!-- JavaScript at the bottom for fast page loading -->
 {% assets "js_all" %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
@@ -70,8 +64,8 @@
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
   ga('create', 'UA-52102624-1', 'corpscores.herokuapp.com');
+  ga('require', 'displayfeatures');
   ga('send', 'pageview');
 
 </script>

@@ -20,10 +20,10 @@ class TestSplitMessage:
         assert len(chunks) is 4
 
     def test_split_msg_line_breaks(self):
-        msg = 'a' * 130 + '\n' + 'b' * 40
+        msg = 'a' * 120 + '\n' + 'b' * 40
         chunks = split_msg(msg)
         assert len(chunks) is 2
-        assert len(chunks[0]) == 130
+        assert len(chunks[0]) == 120
 
     def test_split_msg_one_line(self):
         msg = 'a' * 160 + 'b' * 20
@@ -52,3 +52,13 @@ class TestSendMessage:
             assert len(outbox) is 3
             assert outbox[0].subject == 'subject'
             assert outbox[0].body == 'm' * 130
+
+    def test_send_sms_with_conn(self, app):
+        with mail.record_messages() as outbox:
+            with mail.connect() as conn:
+                send_sms(carrier='verizon',
+                         number=5551112222,
+                         message='m' * 300,
+                         subject='subject',
+                         conn=conn)
+            assert len(outbox) is 3

@@ -5,6 +5,10 @@ from wtforms.validators import DataRequired, Email, EqualTo, Length
 from .models import User
 from dci_notify.sms import carrier_form_tuples
 
+# Sort carriers
+carrier_form_tuples.sort(key=lambda tup: tup[1])
+# For Chosen to display default text, first entry must be empty
+carrier_form_tuples.insert(0, ('',''))
 
 class RegisterForm(Form):
     username = TextField('Username',
@@ -21,7 +25,7 @@ class RegisterForm(Form):
                           validators=[DataRequired(), Length(min=10, max=10)])
     password = PasswordField('Password',
                              validators=[DataRequired(), Length(min=6, max=40)])
-    confirm = PasswordField('Verify password',
+    confirm = PasswordField('Verify Password',
                             [DataRequired(),
                              EqualTo('password', message='Passwords must match')])
 
