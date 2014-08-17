@@ -8,7 +8,8 @@ from dci_notify.database import db
 
 
 class BaseFactory(SQLAlchemyModelFactory):
-    FACTORY_SESSION = db.session
+    class Meta:
+        sqlalchemy_session = db.session
 
     @classmethod
     def _create(cls, target_class, *args, **kwargs):
@@ -20,8 +21,10 @@ class BaseFactory(SQLAlchemyModelFactory):
         return obj
 
 
-class UserFactory(BaseFactory):
-    FACTORY_FOR = User
+class UserFactory(SQLAlchemyModelFactory):
+    class Meta:
+        model = User
+        sqlalchemy_session = db.session
 
     username = Sequence(lambda n: "user{0}".format(n))
     email = Sequence(lambda n: "user{0}@example.com".format(n))

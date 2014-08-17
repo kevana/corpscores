@@ -11,11 +11,6 @@ from dci_notify.user.models import User
 from .factories import UserFactory
 
 
-@pytest.fixture
-def user(db):
-    return UserFactory(password='myprecious')
-
-
 class TestLoggingIn:
 
     def test_can_log_in_returns_200(self, user, testapp):

@@ -29,8 +29,9 @@ class TestUser:
         user.save()
         assert user.password is None
 
-    def test_factory(self):
+    def test_factory(self, db):
         user = UserFactory(password="myprecious")
+        db.session.commit()
         assert bool(user.username)
         assert bool(user.email)
         assert bool(user.phone_num)
