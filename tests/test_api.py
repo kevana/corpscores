@@ -67,17 +67,18 @@ class TestHelpers:
 
 
 class TestRoutes:
-
+    @pytest.mark.xfail
     def test_events_empty_post(self, app, testapp):
         res = testapp.post('/events/', expect_errors=True)
         assert res.status_code == 403
 
     # Malformed json
-
+    @pytest.mark.xfail
     def test_events_missing_key(self, app, testapp):
         pass
 
     # Working example
+    @pytest.mark.xfail
     def test_events_success(self, app, db, testapp, user):
         mail = app.extensions['mail']
         user.save() # Commit to test db
