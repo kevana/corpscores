@@ -50,3 +50,7 @@ blinker==1.3
 
 # Scraper
 requests==2.3.0
+
+# Pytest
+py==1.4.28
+pytest==2.7.1
