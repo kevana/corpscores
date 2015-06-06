@@ -51,3 +51,6 @@ env
 
 # Databases
 *.db
+
+# IntelliJ
+.idea

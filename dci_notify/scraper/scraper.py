@@ -19,6 +19,7 @@ import json
 import os
 import requests
 import smtplib
+import time
 
 
 # Config directives
@@ -26,13 +27,13 @@ MAIL_SERVER = 'smtp.mailgun.org'
 MAIL_PORT = 465
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
-MAIL_USERNAME = 'postmaster@example.com'
-MAIL_PASSWORD = 'example_password'
-MAIL_DEFAULT_SENDER = 'sms@example.com'
-MAIL_SUPPRESS_SEND = False
-APP_SUPPRESS_POST = False
-API_POST_URL = 'http://corpscores.herokuapp.com/events/'
-RECIPIENT = 'admin@example.com'
+MAIL_USERNAME = os.environ.get('MAIL_USERNAME', 'postmaster@example.com')
+MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', 'example_password')
+MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER', 'sms@example.com')
+MAIL_SUPPRESS_SEND = os.environ.get('MAIL_SUPPRESS_SEND', False)
+APP_SUPPRESS_POST = os.environ.get('APP_SUPPRESS_POST', False)
+API_POST_URL = os.environ.get('API_POST_URL', 'http://example.com/events/') # 'http://corpscores.herokuapp.com/events/'
+RECIPIENT = 'admin@example.com' # Emails message before sending to SMS.
 
 
 # May be able to ignore basedir, make file wherever script is running
@@ -68,7 +69,7 @@ def send_email(text):
 
 
 def post_to_app(text):
-    'Post event to app, text is a string containing a json object.'
+    """Post event to app, text is a string containing a json object."""
     headers = {'Content-type': 'application/json',
                'Accept':       'application/json'}
     r = requests.post(API_POST_URL, data=text, headers=headers)
@@ -121,7 +122,7 @@ def process_event(event):
                             sort_keys=True,
                             indent=2,
                             default=dthandler)
-    send_email(event_text)
+    #send_email(event_text)
     add_processed_event(event)
     if not APP_SUPPRESS_POST:
         post_to_app(event_text)
@@ -182,5 +183,9 @@ def scrape_func():
 
 
 if __name__ == '__main__':
-
-    scrape_func()
+    while True:
+        try:
+            scrape_func()
+        except Exception as e:
+            print(e)
+        time.sleep(60)
