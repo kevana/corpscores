@@ -1,6 +1,6 @@
 machine:
   python:
-    version: 3.4.2
+    version: 2.7.6
 
 test:
   pre:
@@ -13,9 +13,9 @@ deployment:
     branch: master
     commands:
       - git push git@heroku.com:corpscores.git $CIRCLE_SHA1:refs/heads/master
-      - heroku run --app corpscores python manage.py db migrate
+      - heroku run --app corpscores python manage.py db upgrade
   staging:
     branch: develop
     commands:
       - git push git@heroku.com:corpscores-staging.git $CIRCLE_SHA1:refs/heads/master
-      - heroku run --app corpscores-staging python manage.py db migrate
+      - heroku run --app corpscores-staging python manage.py db upgrade
