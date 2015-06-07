@@ -1,6 +1,8 @@
 test:
   pre:
    - pip install -r requirements/dev.txt
+  override:
+   - py.test tests
 
 deployment:
   production:
