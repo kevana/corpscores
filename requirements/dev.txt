@@ -3,7 +3,7 @@
 
 # Testing
 pytest
-webtest
+webtest==2.0.15
 factory-boy==2.4.1
 
 # Management script

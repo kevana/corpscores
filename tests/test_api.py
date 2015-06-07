@@ -39,7 +39,8 @@ VALID_EVENT = '''
       "score": "63.800"
     }
   ],
-  "state": "AZ"
+  "state": "AZ",
+  "uuid": "72a399f8-480c-4743-9c14-4357a77582ce"
 }
 '''
 

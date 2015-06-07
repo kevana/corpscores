@@ -79,3 +79,18 @@ class User(UserMixin, SurrogatePK, Model):
 
     def __repr__(self):
         return '<User({username!r})>'.format(username=self.username)
+
+
+class CompetitionEvent(SurrogatePK, Model):
+    __tablename__ = 'competition_events'
+    uuid = Column(db.String(), unique=True, nullable=False)
+    name = Column(db.String())
+    date = Column(db.String())
+    city = Column(db.String())
+    state = Column(db.String())
+
+    def __init__(self, name, **kwargs):
+        db.Model.__init__(self, name=name, **kwargs)
+
+    def __repr__(self):
+        return '<CompetitionEvent({name})>'.format(name=self.name)

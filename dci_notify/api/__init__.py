@@ -22,7 +22,7 @@ from dci_notify.database import (
 )
 from dci_notify.extensions import db, mail
 from dci_notify.sms import send_sms
-from dci_notify.user.models import User
+from dci_notify.user.models import User, CompetitionEvent
 
 score_template = '''{{event.name}} - {{event.date.strftime('%b %d')}}, {{event.city}} {{event.state}}
 {% for corp in event.results -%}
@@ -106,10 +106,16 @@ def get_events():
 @blueprint.route('/events/', methods=['POST'])
 def post_event():
     data = request.get_json()
-    if not request.json or not all(x in data for x in ('city', 'state', 'date',
+    if not request.json or not all(x in data for x in ('uuid', 'city', 'state', 'date',
                                                        'name', 'results')):
         abort(400)
     send_scores(data)
+    # Create and save new event object
+    CompetitionEvent.create(uuid=data['uuid'],
+                            city=data['city'],
+                            state=data['state'],
+                            date=data['date'],
+                            name=data['name'])
     return make_response(jsonify({'status': 'OK'}), 200)
 
 

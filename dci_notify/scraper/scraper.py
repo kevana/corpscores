@@ -96,6 +96,7 @@ def process_event(event):
     infoList = list(infoHeader.strings)
     # Build a new event structure
     thisEvent = {}
+    thisEvent['uuid'] = event
     thisEvent['date'] = datetime.strptime(infoList[0], '%A, %B %d, %Y')
     thisEvent['name'] = infoList[2]
     loc = infoList[1].rsplit(' ', 1)
