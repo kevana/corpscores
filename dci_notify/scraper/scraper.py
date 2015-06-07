@@ -149,7 +149,7 @@ def add_processed_event(event):
     '''Add a single new event to the processed events collection.'''
     events = get_processed_events()
     if event not in events:
-        events += event
+        events.append(event)
         set_processed_events(events)
 
 
