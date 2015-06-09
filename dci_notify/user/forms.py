@@ -4,7 +4,7 @@ Forms for the user module of CorpScores.
 '''
 
 from flask_wtf import Form
-from wtforms import PasswordField, SelectField, TextField
+from wtforms import PasswordField, SelectField, TextField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 from .models import User
@@ -62,3 +62,7 @@ class RegisterForm(Form):
             self.phone_num.errors.append("Phone number already registered")
             return False
         return True
+
+class PhoneNotificationForm(Form):
+    """Form for toggling phone notifications."""
+    phoneEnabled = BooleanField('Enable phone notifications')
