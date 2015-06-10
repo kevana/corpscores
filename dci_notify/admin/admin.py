@@ -10,7 +10,7 @@ from flask.ext.login import current_user
 from dci_notify.admin.forms import SendMessageForm
 from dci_notify.extensions import db
 from dci_notify.sms import send_sms
-from dci_notify.user.models import Role, User
+from dci_notify.user.models import Role, User, CompetitionEvent
 from dci_notify.utils import flash_errors
 
 
@@ -49,3 +49,4 @@ admin = Admin()
 admin.add_view(MyBaseView(name='Message', endpoint='message'))
 admin.add_view(MyView(Role, db.session))
 admin.add_view(MyView(User, db.session))
+admin.add_view(MyView(CompetitionEvent, db.session))
