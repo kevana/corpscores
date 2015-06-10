@@ -15,7 +15,7 @@ from .factories import UserFactory
 class TestUser:
 
     def test_get_by_id(self):
-        user = User('foo', 'foo@bar.com')
+        user = User('foo@bar.com')
         user.save()
 
         retrieved = User.get_by_id(user.id)
@@ -44,8 +44,8 @@ class TestUser:
         assert user.check_password('myprecious')
 
     def test_check_password(self):
-        user = User.create(username="foo", email="foo@bar.com",
-                           password="foobarbaz123")
+        user = User.create(username="foo", email="foo@bar.com",)
+        user.set_password('foobarbaz123')
         assert user.check_password('foobarbaz123') is True
         assert user.check_password("barfoobaz") is False
 

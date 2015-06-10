@@ -24,6 +24,7 @@ from dci_notify.extensions import (
 )
 from dci_notify.settings import ProdConfig, DevConfig, TestConfig
 from dci_notify.user.models import User, Role
+from dci_notify.user.forms import RegisterForm
 
 def create_app(config_object=None):
     '''An application factory, as explained here:
@@ -68,7 +69,7 @@ def register_extensions(app):
     mail.app = app
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-    security.init_app(app, datastore=user_datastore)
+    security.init_app(app, datastore=user_datastore, register_form=RegisterForm)
     if not app.debug:
         sentry.init_app(app)
     return None

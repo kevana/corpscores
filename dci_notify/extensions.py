@@ -11,7 +11,6 @@ from flask.ext.login import LoginManager
 login_manager = LoginManager()
 
 from flask.ext.security import Security
-#user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security()
 
 from flask.ext.sqlalchemy import SQLAlchemy
