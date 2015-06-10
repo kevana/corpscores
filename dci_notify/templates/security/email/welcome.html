@@ -1,0 +1,15 @@
+<p>Welcome to CorpScores!</p>
+
+<p>Score updates will be sent to your phone as soon as they are posted by DCI.</p>
+
+<p>To disable phone notifications at any time, please visit https://corpscores.herokuapp.com/users/</p>
+
+<p>Thank you,<br>
+Kevan
+</p>
+
+{% if security.confirmable %}
+<p>You can confirm your email through the link below:</p>
+
+<p><a href="{{ confirmation_link }}">Confirm my account</a></p>
+{% endif %}

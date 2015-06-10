@@ -6,6 +6,7 @@ The app module, containing the app factory function.
 import os
 
 from flask import Flask, render_template
+from flask.ext.security import SQLAlchemyUserDatastore
 
 from dci_notify import public, user, api
 from dci_notify.admin import admin
@@ -18,10 +19,12 @@ from dci_notify.extensions import (
     migrate,
     debug_toolbar,
     mail,
-    sentry
+    sentry,
+    security
 )
 from dci_notify.settings import ProdConfig, DevConfig, TestConfig
-
+from dci_notify.user.models import User, Role
+from dci_notify.user.forms import RegisterForm
 
 def create_app(config_object=None):
     '''An application factory, as explained here:
@@ -64,6 +67,9 @@ def register_extensions(app):
     admin.init_app(app)
     mail.init_app(app)
     mail.app = app
+
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    security.init_app(app, datastore=user_datastore, register_form=RegisterForm)
     if not app.debug:
         sentry.init_app(app)
     return None

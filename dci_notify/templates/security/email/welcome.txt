@@ -1,4 +1,4 @@
-You are now signed up for CorpScores!
+Welcome to CorpScores!
 
 Score updates will be sent to your phone as soon as they are posted by DCI.
 
@@ -6,3 +6,9 @@ To disable phone notifications at any time, please visit https://corpscores.hero
 
 Thank you,
 Kevan
+
+{% if security.confirmable %}
+You can confirm your email through the link below:
+
+{{ confirmation_link }}
+{% endif %}

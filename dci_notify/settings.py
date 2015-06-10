@@ -24,6 +24,7 @@ class Config(object):
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME', 'postmaster@example.com')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', '<example_password>')
     MAIL_DEFAULT_SENDER = 'noreply@kevanahlquist.com'
+    SECURITY_EMAIL_SENDER = MAIL_DEFAULT_SENDER
     SMS_DEFAULT_SENDER = 'sms@kevanahlquist.com'
     # Logging setup
     ADMINS = ['kevan@kevanahlquist.com']
@@ -34,6 +35,12 @@ class Config(object):
     SENTRY_DSN = os.environ.get('SENTRY_DSN')
     API_KEY = os.environ.get('API_KEY', 'API_KEY')
 
+    SECURITY_PASSWORD_HASH = 'bcrypt'
+    SECURITY_PASSWORD_SALT = ''
+    SECURITY_RECOVERABLE = True  # Enable password resets
+    SECURITY_REGISTERABLE = True  # Allow new user registration
+    SECURITY_CHANGEABLE = True  # Allow password changes
+    SECURITY_POST_LOGIN_VIEW = 'user.members'
 
 class ProdConfig(Config):
     '''Production configuration.'''

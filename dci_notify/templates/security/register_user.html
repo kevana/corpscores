@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Login{% endblock %}
+
+{% block content %}
+{% from "security/_macros.html" import render_field, render_errors, set_has_error %}
+
+<div class="container">
+  <h1>Register</h1>
+    <br/>
+    <form action="{{ url_for_security('register') }}" method="POST" name="register_user_form" class="form-inline form-register" role="form">
+            {{ register_user_form.hidden_tag() }}
+            <div class="row">
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{register_user_form.email.label}}
+                    <div class="input-group {{ set_has_error(register_user_form.email) }}">
+                        <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                        {{register_user_form.email(placeholder="Email", class_="form-control")}}
+
+                    </div>
+                    {{ render_errors(register_user_form.email) }}
+                </div>
+            </div><!--/row-->
+            <div class="row">
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{register_user_form.carrier.label}}
+                    <div class="input-group {{ set_has_error(register_user_form.carrier) }}">
+                        <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                        {{register_user_form.carrier(**{"data-placeholder":"Choose your mobile carrier...", "class":"form-control chosen-select", "id":"carrier-input"})}}
+                    </div>
+                    {{ render_errors(register_user_form.carrier) }}
+                </div>
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{register_user_form.phone_num.label}}
+                    <div class="input-group {{ set_has_error(register_user_form.phone_num) }}">
+                        <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+                        {{register_user_form.phone_num(placeholder="(555) 789-1234", class_="form-control")}}
+                    </div>
+                    {{ render_errors(register_user_form.phone_num) }}
+                </div>
+            </div><!--/row-->
+            <div class="row">
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{register_user_form.password.label}}
+                    <div class="input-group {{ set_has_error(register_user_form.password) }}">
+                        <span class="input-group-addon"><i class="fa fa-asterisk fa-fw"></i></span>
+                        {{register_user_form.password(placeholder="Password", class_="form-control")}}
+                    </div>
+                    {{ render_errors(register_user_form.password) }}
+                </div>
+                <div class="form-group col-sm-6 col-md-6 col-lg-4">
+                    {{register_user_form.password_confirm.label}}
+                    <div class="input-group {{ set_has_error(register_user_form.password_confirm) }}">
+                        <span class="input-group-addon"><i class="fa fa-asterisk fa-fw"></i></span>
+                        {{register_user_form.password_confirm(placeholder="Password (again)", class_="form-control")}}
+                    </div>
+                    {{ render_errors(register_user_form.password_confirm) }}
+                </div>
+            </div><!--/row-->
+            <br>
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-4">
+                    {{ render_field(register_user_form.submit, class_='btn btn-primary') }}
+                </div>
+            </div>
+    </form>
+    <br>
+    <p><em>Already registered?</em> Click <a href="{{ url_for('security.login') }}">here</a> to login.</p>
+    {% include "security/_menu.html" %}
+</div>
+{% endblock %}
+{% block js %}
+{{ super() }}
+<script type="text/javascript">
+    (function($, window) {
+        $('#phone_num').mask('(000) 000-0000');
+        $(".chosen-select").chosen(); //{inherit_select_classes: true});
+    }).call(this, $, window);
+    $('form').bind('submit', function(){
+        $('#phone_num').unmask();
+        var num = $('#phone_num').val();
+        num = num.replace(/\D/g,'');
+        $('#phone_num').val(num);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% if security.registerable or security.recoverable or security.confirmable or security.changeable %}
+    <h3>Account Actions</h3>
+    <ul>
+        {% if current_user.is_anonymous() %}
+            <li><a href="{{ url_for_security('login') }}{% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}">Login</a>
+            </li>
+            {% if security.registerable %}
+                <li><a href="{{ url_for_security('register') }}{% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}">Register</a><br/>
+                </li>
+            {% endif %}
+            {% if security.recoverable %}
+                <li><a href="{{ url_for_security('forgot_password') }}">Forgot password</a><br/></li>
+            {% endif %}
+        {% else %}
+            {% if security.changeable %}
+                <li><a href="{{ url_for_security('change_password') }}">Change password</a><br/></li>
+            {% endif %}
+            {% if security.confirmable %}
+                <li><a href="{{ url_for_security('send_confirmation') }}">Confirm account</a></li>
+            {% endif %}
+        {% endif %}
+    </ul>
+{% endif %}

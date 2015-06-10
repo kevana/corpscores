@@ -5,11 +5,9 @@ Models for the user module of CorpScores.
 
 import datetime as dt
 
-from flask import render_template
-from flask.ext.login import UserMixin
-from flask.ext.mail import Message
+from flask.ext.security import UserMixin, RoleMixin
 
-from dci_notify.extensions import bcrypt, mail
+from dci_notify.extensions import bcrypt
 from dci_notify.database import (
     Column,
     db,
@@ -21,10 +19,10 @@ from dci_notify.database import (
 from dci_notify.sms import carrier_slugs, send_sms
 
 
-class Role(SurrogatePK, Model):
+class Role(SurrogatePK, Model, RoleMixin):
     '''Role database model.'''
     __tablename__ = 'roles'
-    name = Column(db.String(80), unique=True, nullable=False)
+    name = Column(db.String(80), unique=True, nullable=False) # Flask-Security wants name and description fields
     user_id = ReferenceCol('users', nullable=True)
     user = relationship('User', backref='roles')
 
@@ -38,9 +36,8 @@ class Role(SurrogatePK, Model):
 class User(UserMixin, SurrogatePK, Model):
     '''User database model.'''
     __tablename__ = 'users'
-    username = Column(db.String(80), unique=True, nullable=False)
+    username = Column(db.String(80), nullable=True)
     email = Column(db.String(80), unique=True, nullable=False)
-    #: The hashed password
     password = Column(db.String(128), nullable=True)
     created_at = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
     first_name = Column(db.String(30), nullable=True)
@@ -52,20 +49,13 @@ class User(UserMixin, SurrogatePK, Model):
     active = Column(db.Boolean(), default=False)
     is_admin = Column(db.Boolean(), default=False)
 
-    def __init__(self, username, email, password=None, **kwargs):
-        db.Model.__init__(self, username=username, email=email, **kwargs)
-        if password:
-            self.set_password(password)
-        else:
-            self.password = None
-        # Send Email and SMS confirmation messages
-        message = 'You are now signed up for CorpScores.'
-        if self.carrier and self.phone_num:
+    def __init__(self, email, **kwargs):
+        db.Model.__init__(self, email=email, phone_active=True, **kwargs)
+        # Send SMS confirmation message
+        message = 'You are now signed up for CorpScores. To disable SMS visit https://corpscores.herokuapp.com/users/'
+        if self.carrier and self.phone_num and self.phone_active:
             send_sms(self.carrier, self.phone_num, message)
-        msg = Message('CorpScores Registration Confirmation',
-                      recipients=[self.email])
-        msg.body = render_template('users/reg_confirm.txt')
-        mail.send(msg)
+
 
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password)
@@ -78,7 +68,7 @@ class User(UserMixin, SurrogatePK, Model):
         return "{0} {1}".format(self.first_name, self.last_name)
 
     def __repr__(self):
-        return '<User({username!r})>'.format(username=self.username)
+        return '<User({email!r})>'.format(email=self.email)
 
 
 class CompetitionEvent(SurrogatePK, Model):
