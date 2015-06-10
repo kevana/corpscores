@@ -6,8 +6,9 @@ Models for the user module of CorpScores.
 import datetime as dt
 
 from flask import render_template
-from flask.ext.login import UserMixin
 from flask.ext.mail import Message
+from flask.ext.security import Security, SQLAlchemyUserDatastore, \
+    UserMixin, RoleMixin, login_required
 
 from dci_notify.extensions import bcrypt, mail
 from dci_notify.database import (
@@ -21,10 +22,10 @@ from dci_notify.database import (
 from dci_notify.sms import carrier_slugs, send_sms
 
 
-class Role(SurrogatePK, Model):
+class Role(SurrogatePK, Model, RoleMixin):
     '''Role database model.'''
     __tablename__ = 'roles'
-    name = Column(db.String(80), unique=True, nullable=False)
+    name = Column(db.String(80), unique=True, nullable=False) # Flask-Security wants name and description fields
     user_id = ReferenceCol('users', nullable=True)
     user = relationship('User', backref='roles')
 

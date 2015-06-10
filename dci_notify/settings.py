@@ -34,6 +34,11 @@ class Config(object):
     SENTRY_DSN = os.environ.get('SENTRY_DSN')
     API_KEY = os.environ.get('API_KEY', 'API_KEY')
 
+    SECURITY_PASSWORD_HASH = 'bcrypt'
+    SECURITY_PASSWORD_SALT = ''
+    SECURITY_RECOVERABLE = True  # Enable password resets
+    SECURITY_REGISTERABLE = True  # Allow new user registration
+    SECURITY_CHANGEABLE = True  # Allow password changes
 
 class ProdConfig(Config):
     '''Production configuration.'''

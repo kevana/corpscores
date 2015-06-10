@@ -4,7 +4,8 @@ Views for the user module of CorpScores.
 '''
 
 from flask import Blueprint, render_template, request, flash
-from flask.ext.login import login_required
+#from flask.ext.login import login_required
+from flask.ext.security import login_required
 from dci_notify.user.forms import PhoneNotificationForm
 from dci_notify.utils import flash_errors
 from flask.ext.login import current_user
