@@ -6,7 +6,7 @@ API tests.
 import json
 import pytest
 
-from dci_notify.api import send_scores
+from dci_notify.api.funcs import send_scores
 from dci_notify.scraper.scraper import eqIn
 from .factories import UserFactory
 
